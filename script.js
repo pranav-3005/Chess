@@ -13,6 +13,8 @@ function setChessBoardAndPieces(eventDetails) {
     //2. set chess pieces
     setChessPieces()
 
+    // console.log( window.getComputedStyle(chessBoard).getPropertyValue('opacity'))
+
     //3. set piece's functionalities
     for(let i in chessSquares)
     {
@@ -24,12 +26,19 @@ function setChessBoardAndPieces(eventDetails) {
                 chessSquares[i].style.cssText=`background-color:green;
                                             opacity:0.5;
                                             cursor : pointer;`
+            chessSquares[i].style.backgroundColor='green'
+            chessSquares[i].style.opacity='0.5'
+            chessSquares[i].style.cursor='pointer'
                                         
             })
             chessSquares[i].addEventListener("mouseout",()=>{
-                chessSquares[i].style.cssText=`background-color: ${squareColor[i]};
-                                                cursor : auto;
-                                                padding-top:5px`
+                // chessSquares[i].style.cssText=`background-color: ${squareColor[i]};
+                //                                 cursor : auto;
+                //                                 padding-top:5px`
+                chessSquares[i].style.backgroundColor= `${squareColor[i]}`
+                chessSquares[i].style.cursor=`auto`
+                chessSquares[i].style.opacity='1'
+                chessSquares[i].style.paddingTop='5px'
             })
 
 
@@ -310,91 +319,136 @@ function setChessPieces() {
         let col=position[0].charCodeAt(0)
         let row= Number(position[1])
 
-        let whiteEndCol='h'.charCodeAt(0)
-        let blackEndCol='a'.charCodeAt(0)
-
         if(pawnId.includes("black"))
         {
-            //any blocks in straight line
+            //check for blocks in straight line & highlight movement areas
             if( (row-1)>=1 &&  chessSquares[ position[0]+(row-1) ].childNodes.length<=0)
-            {
-                chessSquares[ position[0]+(row-1) ].style.cssText=`background-color:${squareColor[position[0]+(row-1)]};
-                                                                    opacity:0.5;`
-
-                if( (row-2)>=1 &&  chessSquares[ position[0]+(row-2) ].childNodes.length<=0 )
                 {
-                    chessSquares[ position[0]+(row-2) ].style.cssText=`background-color:${squareColor[position[0]+(row-2)]};
-                                                                    opacity:0.5;`
-                }
-            }
-            else
-            {
+                    let nextSquareOpacity = window.getComputedStyle(chessSquares[ position[0]+(row-1) ]).getPropertyValue('opacity')
 
+                    //checking to revert or show movement areas
+                    if(nextSquareOpacity ===  '1')
+                    {
+                        // chessSquares[ position[0]+(row-1) ].style.cssText=`background-color:${squareColor[position[0]+(row-1)]};
+                        //                                                 opacity:0.5;`
+                        chessSquares[ position[0]+(row-1) ].style.backgroundColor=`${squareColor[position[0]+(row-1)]}`
+                        chessSquares[ position[0]+(row-1) ].style.opacity='0.5'
+
+                        //to move to the movement area
+                        chessSquares[ position[0]+(row-1) ].addEventListener('click',movePawnNextSquare)
+                        function movePawnNextSquare() {
+                            //1.clear backgrounds
+                            chessSquares[ position[0]+(row-1) ].style.opacity='1'
+                            chessSquares[ position[0]+(row-2) ].style.opacity='1'
+
+                            //2. move pawn element
+                            chessSquares[ position[0]+(row-1) ].append(chessSquares[position])
+                            chessSquares[position].innerHTML=''
+                            chessSquares[ position[0]+(row-1) ].removeEventListener('click',movePawnNextSquare)
+                        }
+                    }
+                    else
+                    {
+                        // chessSquares[ position[0]+(row-1) ].style.cssText=`background-color:${squareColor[position[0]+(row-1)]};
+                        //                                                 opacity:1;`
+                        chessSquares[ position[0]+(row-1) ].style.backgroundColor=`${squareColor[position[0]+(row-1)]}`
+                        chessSquares[ position[0]+(row-1) ].style.opacity='1'
+                    }
+
+                    if( (row-2)>=1 &&  chessSquares[ position[0]+(row-2) ].childNodes.length<=0 )
+                    {
+                        let nextNextSquareOpacity = window.getComputedStyle(chessSquares[ position[0]+(row-2) ]).getPropertyValue('opacity')
+
+                        if(nextNextSquareOpacity === '1')
+                        {
+                            chessSquares[ position[0]+(row-2) ].style.cssText=`background-color:${squareColor[position[0]+(row-2)]};
+                                                                        opacity:0.5;`
+                            chessSquares[ position[0]+(row-2) ].style.backgroundColor=`${squareColor[position[0]+(row-2)]}`
+                            chessSquares[ position[0]+(row-2) ].style.opacity='0.5'
+                        }
+                        else
+                        {
+                            // chessSquares[ position[0]+(row-2) ].style.cssText=`background-color:${squareColor[position[0]+(row-2)]};
+                            //                                             opacity:1;`
+                            chessSquares[ position[0]+(row-2) ].style.backgroundColor=`${squareColor[position[0]+(row-2)]}`
+                            chessSquares[ position[0]+(row-2) ].style.opacity='1'
+                        }
+                    }
             }
+            
+            //cut next diagonal piece,if
+                //right
+                // console.log( typeof `${chessSquares[position]}`)
+                
+                // if(col-1 >= 'a'.charCodeAt(0) && row-1>=1 && chessSquares[ String.fromCharCode(col-1)+(row-1) ].childNodes.length>0 )
+                // {
+                //     let rightDiagonalElement=chessSquares[ String.fromCharCode(col-1)+(row-1) ]
+
+                //     // rightDiagonalElement.removeChild(rightDiagonalElement.firstChild)
+                //     // rightDiagonalElement.append(chessSquares[position])
+                //     rightDiagonalElement.innerHTML= JSON.stringify(chessSquares[position])
+                //     chessSquares[position].innerHTML=''
+                // }
+                // //left
+                // // let rightDiagonalElement=chessPieces[ String.fromCharCode(col+1)+(row-1) ]
+                // if(col+1 <= 'h'.charCodeAt(0) && row-1>=1 &&  chessSquares[ String.fromCharCode(col+1)+(row-1) ].childNodes.length>0)
+                // {
+                //     let leftDiagonalElement=chessSquares[ String.fromCharCode(col+1)+(row-1) ]
+
+                //     // leftDiagonalElement.removeChild(leftDiagonalElement.firstChild)
+                //     // leftDiagonalElement.append(chessSquares[position])
+                //     leftDiagonalElement.innerHTML= JSON.stringify(chessSquares[position])
+                //     chessSquares[position].innerHTML=''
+                // }
         }
+
+        //white
         else
         {
-
             //any blocks in straight line
             if( (row+1)<=8 &&  chessSquares[ position[0]+(row+1) ].childNodes.length<=0)
-            {
-                chessSquares[ position[0]+(row+1) ].style.cssText=`background-color:${squareColor[position[0]+(row+1)]};
-                                                                    opacity:0.5;`
-
-                if( (row+2)<=8 &&  chessSquares[ position[0]+(row+2) ].childNodes.length<=0 )
                 {
-                    chessSquares[ position[0]+(row+2) ].style.cssText=`background-color:${squareColor[position[0]+(row+2)]};
-                                                                    opacity:0.5;`
-                }
-            }
-            else
-            {
 
-            }  
+                    let nextSquareOpacity = window.getComputedStyle(chessSquares[ position[0]+(row+1) ]).getPropertyValue('opacity')
+
+                    if(nextSquareOpacity === '1')
+                    {
+                        // chessSquares[ position[0]+(row+1) ].style.cssText=`background-color:${squareColor[position[0]+(row+1)]};
+                        //                                                 opacity:0.5;`
+                        chessSquares[ position[0]+(row+1) ].style.backgroundColor=`${squareColor[position[0]+(row+1)]}`
+                        chessSquares[ position[0]+(row+1) ].style.opacity='0.5'
+                    }
+                    else
+                    {
+                        // chessSquares[ position[0]+(row+1) ].style.cssText=`background-color:${squareColor[position[0]+(row+1)]};
+                        //                                                 opacity:1;`
+                        chessSquares[ position[0]+(row+1) ].style.backgroundColor=`${squareColor[position[0]+(row+1)]}`
+                        chessSquares[ position[0]+(row+1) ].style.opacity='1'
+                    }
+
+                    if( (row+2)<=8 &&  chessSquares[ position[0]+(row+2) ].childNodes.length<=0 )
+                    {
+
+                        let nextNextSquareOpacity = window.getComputedStyle(chessSquares[ position[0]+(row+2) ]).getPropertyValue('opacity')
+
+                        if(nextNextSquareOpacity === '1')
+                        {
+                            // chessSquares[ position[0]+(row+2) ].style.cssText=`background-color:${squareColor[position[0]+(row+2)]};
+                            //                                             opacity:0.5;`
+                            chessSquares[ position[0]+(row+2) ].style.backgroundColor=`${squareColor[position[0]+(row+2)]}`
+                            chessSquares[ position[0]+(row+2) ].style.opacity='0.5'
+                        }
+                        else
+                        {
+                            chessSquares[ position[0]+(row+2) ].style.cssText=`background-color:${squareColor[position[0]+(row+2)]};
+                                                                        opacity:1;`
+                            chessSquares[ position[0]+(row+2) ].style.backgroundColor=`${squareColor[position[0]+(row+2)]}`
+                            chessSquares[ position[0]+(row+2) ].style.opacity='1'
+                        }
+                    }
+            }
         }
 
-        // chessPieces[position].addEventListener("click",(position,pawnId)=>{
-
-        //     let col=position[0].charCodeAt(0)
-        //     let row= Number(position[1])
-
-        //     if(pawnId.includes("black"))
-        //     {
-        //         //any blocks in straight line
-        //         if( (row-1)>=1 &&  chessSquares[ position[0]+(row-1) ].childNodes.length<=0)
-        //         {
-        //             chessSquares[ position[0]+(row-1) ].style.cssText=`background-color:${squareColor[position[0]+(row-1)]};`
-    
-        //             if( (row-2)>=1 &&  chessSquares[ position[0]+(row-2) ].childNodes.length<=0 )
-        //             {
-        //                 chessSquares[ position[0]+(row-2) ].style.cssText=`background-color:${squareColor[position[0]+(row-2)]};`
-        //             }
-        //         }
-        //         else
-        //         {
-    
-        //         }
-        //     }
-        //     else
-        //     {
-    
-        //         //any blocks in straight line
-        //         if( (row+1)<=8 &&  chessSquares[ position[0]+(row+1) ].childNodes.length<=0)
-        //         {
-        //             chessSquares[ position[0]+(row+1) ].style.cssText=`background-color:${squareColor[position[0]+(row+1)]};`
-    
-        //             if( (row+2)<=8 &&  chessSquares[ position[0]+(row+2) ].childNodes.length<=0 )
-        //             {
-        //                 chessSquares[ position[0]+(row+2) ].style.cssText=`background-color:${squareColor[position[0]+(row+2)]};`
-        //             }
-        //         }
-        //         else
-        //         {
-    
-        //         }  
-        //     }
-
-        // })
 
     }
 
@@ -404,7 +458,7 @@ function setChessPieces() {
 
 
 //testing purpose
-    // setChessPieces()
+    setChessPieces()
     // let piece = document.createElement('div')
     // piece.innerHTML='<i class="fa-solid fa-chess-pawn" id="tempo"  style="font-size:70px; color:black "></i>'
     // piece.style.cssText=`display:flex;
