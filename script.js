@@ -1,3 +1,5 @@
+// $.getScript("temp.js")
+
 let chessBoard=document.getElementById("chessBoard")
 var chessSquares={}
 var chessPieces={}
