@@ -8,6 +8,8 @@ var chessPieces={}/*
                         parentColor: color
                     }*/
 
+console.log("test1")
+
 
 document.addEventListener("DOMContentLoaded",setChessBoardAndPieces)
 
