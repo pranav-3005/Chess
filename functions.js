@@ -1,5 +1,7 @@
-$.getScript("script.js")
+$.getScript("./pieceFunctions/pawnFunctions.js")
 
+
+// "rgb(148,96,44)","rgb(231,204,177)" black,white
 
 
 function setChessBoard() {
@@ -28,14 +30,9 @@ function setChessBoard() {
                     background-color:${clr[ (j++)%2 ]};
                     box-sizing: border-box;
                     padding-top:5px`
-                }
-
-            // $chessBoard.append(square)
-                
+                }                
             $chessBoard.append($square)
 
-            // chessSquares[`${(k+i)}`] = square
-            // squareColor[`${(k+i)}`]=square.style.backgroundColor
 
         }
     }
@@ -94,7 +91,7 @@ function setPiecesAndProperties() {
 
 
 
-//highlight -----------
+//highlight (hover) -----------
 
 function highlightSquare($square) {
     
@@ -110,69 +107,18 @@ function highlightSquare($square) {
     })
 }
 
+function mouseover(eventDetails) {
+    this.style.opacity='0.6'
+    this.style.cursor='pointer'
+}
+
+function mouseout(eventDetails) {
+    this.style.opacity='1'
+    this.style.cursor='auto'
+    this.style.paddingTop='5px'
+}
+
 //pieces --------------
-
-
-function setBlackPawn(c) {
-
-    let $piece = document.createElement('div')
-
-        $piece.innerHTML='<i class="fa-solid fa-chess-pawn" style="font-size:70px; color:black "></i>'
-
-        $piece.setAttribute('id',`blackPawn${c.toUpperCase()}`)
-        $piece.setAttribute('class','chessPiece')
-        
-        $piece.style.cssText=`display:flex;
-                            justify-content:center;
-                            align-items:center;`
-        
-        let $square= document.getElementById(`${c+7}`)
-
-        $square.append($piece)
-
-        //setting obj
-        chessPieces[`${$piece.id}`] = {
-            $PieceElement : $piece,
-            $parentElement : $square,
-            squareColor : $square.style.backgroundColor
-        }
-
-        //highlight the square
-        highlightSquare($square)
-
-        //set pawn properties
-        $piece.addEventListener("click",()=>{setPawnProperties($piece.id)}) 
-}
-
-function setWhitePawn(c) {
-   
-    let $piece = document.createElement('div')
-
-    $piece.innerHTML='<i class="fa-solid fa-chess-pawn" style="font-size:70px; color:white "></i>'
-
-    $piece.setAttribute('id',`whitePawn${c.toUpperCase()}`)
-    $piece.setAttribute('class','chessPiece')
-    
-    $piece.style.cssText=`display:flex;
-                        justify-content:center;
-                        align-items:center;`
-    
-    let $square= document.getElementById(`${c+2}`)
-
-    $square.append($piece)
-
-    //setting obj
-    chessPieces[`${$piece.id}`] = {
-        $pieceElement : $piece,
-        $parentElement : $square,
-    }
-
-    //highlight the square
-    highlightSquare($square)
-
-    //set piece properties
-    $piece.addEventListener("click",()=>{setPawnProperties($piece.id)}) 
-}
 
 function setBlackRook() {
 
@@ -191,13 +137,15 @@ function setBlackRook() {
     $square.append($piece)
 
     chessPieces[`${$piece.id}`] = {
-        $PieceElement : $piece,
+        $pieceElement : $piece,
         $parentElement : $square,
+        parentColor : $square.style.backgroundColor
     }
 
     //highlight the square
-    highlightSquare($square)
-
+    $square.addEventListener("mouseover",mouseover)
+    $square.addEventListener("mouseout",mouseout)
+    
     //2nd
     $piece =document.createElement('div')
     $piece.innerHTML='<i class="fa-solid fa-chess-rook" style="font-size:70px;"></i>'
@@ -213,12 +161,14 @@ function setBlackRook() {
     $square.append($piece)
 
     chessPieces[`${$piece.id}`] = {
-        $PieceElement : $piece,
+        $pieceElement : $piece,
         $parentElement : $square,
+        parentColor : $square.style.backgroundColor
     }
 
     //highlight the square
-    highlightSquare($square)
+    $square.addEventListener("mouseover",mouseover)
+    $square.addEventListener("mouseout",mouseout)
     
 }
 
@@ -238,12 +188,14 @@ function setWhiteRook() {
     $square.append($piece)
 
     chessPieces[`${$piece.id}`] = {
-        $PieceElement : $piece,
+        $pieceElement : $piece,
         $parentElement : $square,
+        parentColor : $square.style.backgroundColor
     }
 
     //highlight the square
-    highlightSquare($square)
+    $square.addEventListener("mouseover",mouseover)
+    $square.addEventListener("mouseout",mouseout)
 
     
     //2nd
@@ -261,13 +213,15 @@ function setWhiteRook() {
     $square.append($piece)
 
     chessPieces[`${$piece.id}`] = {
-        $PieceElement : $piece,
+        $pieceElement : $piece,
         $parentElement : $square,
+        parentColor : $square.style.backgroundColor
     }
 
     //highlight the square
-    highlightSquare($square)
-    
+    $square.addEventListener("mouseover",mouseover)
+    $square.addEventListener("mouseout",mouseout)
+        
 }
 
 function setBlackKnight() {
@@ -285,8 +239,15 @@ function setBlackKnight() {
     let $square=document.getElementById('b8')
     $square.append($piece)
 
+    chessPieces[`${$piece.id}`] = {
+        $pieceElement : $piece,
+        $parentElement : $square,
+        parentColor : $square.style.backgroundColor
+    }
+
     //highlight the square
-    highlightSquare($square)
+    $square.addEventListener("mouseover",mouseover)
+    $square.addEventListener("mouseout",mouseout)
 
 
     //2nd
@@ -303,8 +264,15 @@ function setBlackKnight() {
     $square=document.getElementById('g8')
     $square.append($piece)
 
+    chessPieces[`${$piece.id}`] = {
+        $pieceElement : $piece,
+        $parentElement : $square,
+        parentColor : $square.style.backgroundColor
+    }
+
     //highlight the square
-    highlightSquare($square)
+    $square.addEventListener("mouseover",mouseover)
+    $square.addEventListener("mouseout",mouseout)
 
 }
 
@@ -323,8 +291,15 @@ function setWhiteKnight() {
     let $square=document.getElementById('b1')
     $square.append($piece)
 
+    chessPieces[`${$piece.id}`] = {
+        $pieceElement : $piece,
+        $parentElement : $square,
+        parentColor : $square.style.backgroundColor
+    }
+
     //highlight the square
-    highlightSquare($square)
+    $square.addEventListener("mouseover",mouseover)
+    $square.addEventListener("mouseout",mouseout)
 
 
     //2nd        
@@ -341,8 +316,15 @@ function setWhiteKnight() {
     $square=document.getElementById('g1')
     $square.append($piece)
 
+    chessPieces[`${$piece.id}`] = {
+        $pieceElement : $piece,
+        $parentElement : $square,
+        parentColor : $square.style.backgroundColor
+    }
+
     //highlight the square
-    highlightSquare($square)
+    $square.addEventListener("mouseover",mouseover)
+    $square.addEventListener("mouseout",mouseout)
 
 }
 
@@ -360,8 +342,15 @@ function setBlackBishop() {
     let $square=document.getElementById('c8')
     $square.append($piece)
 
+    chessPieces[`${$piece.id}`] = {
+        $pieceElement : $piece,
+        $parentElement : $square,
+        parentColor : $square.style.backgroundColor
+    }
+
     //highlight the square
-    highlightSquare($square)
+    $square.addEventListener("mouseover",mouseover)
+    $square.addEventListener("mouseout",mouseout)
 
 
     //2nd
@@ -377,8 +366,15 @@ function setBlackBishop() {
     $square=document.getElementById('f8')
     $square.append($piece)
 
+    chessPieces[`${$piece.id}`] = {
+        $pieceElement : $piece,
+        $parentElement : $square,
+        parentColor : $square.style.backgroundColor
+    }
+
     //highlight the square
-    highlightSquare($square)
+    $square.addEventListener("mouseover",mouseover)
+    $square.addEventListener("mouseout",mouseout)
 
 }
 
@@ -396,8 +392,15 @@ function setWhiteBishop() {
     let $square=document.getElementById('c1')
     $square.append($piece)
 
+    chessPieces[`${$piece.id}`] = {
+        $pieceElement : $piece,
+        $parentElement : $square,
+        parentColor : $square.style.backgroundColor
+    }
+
     //highlight the square
-    highlightSquare($square)
+    $square.addEventListener("mouseover",mouseover)
+    $square.addEventListener("mouseout",mouseout)
 
 
     //2nd
@@ -412,9 +415,16 @@ function setWhiteBishop() {
 
     $square=document.getElementById('f1')
     $square.append($piece)
+    
+    chessPieces[`${$piece.id}`] = {
+        $pieceElement : $piece,
+        $parentElement : $square,
+        parentColor : $square.style.backgroundColor
+    }
 
     //highlight the square
-    highlightSquare($square)
+    $square.addEventListener("mouseover",mouseover)
+    $square.addEventListener("mouseout",mouseout)
     
 }
 
@@ -433,8 +443,15 @@ function setBlackKingAndQueen() {
     let $square=document.getElementById('d8')
     $square.append($piece)
 
+    chessPieces[`${$piece.id}`] = {
+        $pieceElement : $piece,
+        $parentElement : $square,
+        parentColor : $square.style.backgroundColor
+    }
+
     //highlight the square
-    highlightSquare($square)
+    $square.addEventListener("mouseover",mouseover)
+    $square.addEventListener("mouseout",mouseout)
  
 
     //2nd
@@ -451,8 +468,15 @@ function setBlackKingAndQueen() {
     $square=document.getElementById('e8')
     $square.append($piece)
 
+    chessPieces[`${$piece.id}`] = {
+        $pieceElement : $piece,
+        $parentElement : $square,
+        parentColor : $square.style.backgroundColor
+    }
+
     //highlight the square
-    highlightSquare($square)
+    $square.addEventListener("mouseover",mouseover)
+    $square.addEventListener("mouseout",mouseout)
     
 }
 
@@ -471,8 +495,15 @@ function setWhiteKingAndQueen() {
     let $square=document.getElementById('d1')
     $square.append($piece)
 
+    chessPieces[`${$piece.id}`] = {
+        $pieceElement : $piece,
+        $parentElement : $square,
+        parentColor : $square.style.backgroundColor
+    }
+
     //highlight the square
-    highlightSquare($square)
+    $square.addEventListener("mouseover",mouseover)
+    $square.addEventListener("mouseout",mouseout)
 
     
     //2nd
@@ -489,76 +520,24 @@ function setWhiteKingAndQueen() {
     $square=document.getElementById('e1')
     $square.append($piece)
 
+    chessPieces[`${$piece.id}`] = {
+        $pieceElement : $piece,
+        $parentElement : $square,
+        parentColor : $square.style.backgroundColor
+    }
+
     //highlight the square
-    highlightSquare($square)
+    $square.addEventListener("mouseover",mouseover)
+    $square.addEventListener("mouseout",mouseout)
     
 }
 
 
-//properties ------------------------------
-
-function setPawnProperties(pawnId) {
-
-    let position=chessPieces[`${pawnId}`]['$parentElement'].id
+//misc
 
 
-    let col=position[0].charCodeAt(0)
-    let row= Number(position[1])
 
-    if(pawnId.includes("black"))
-    {
-        //check for blocks in straight line & highlight movement areas  `${position[0]+(row-1)}`
-        if( checkValidToMove(`${position[0]+(row-1)}`),"down" )
-        {
-            let nextSquare= document.getElementById(position[0]+(row-1))
-            let nextNextSquare= document.getElementById(position[0]+(row-2))
-
-            let nextSquareOpacity = window.getComputedStyle(nextSquare).getPropertyValue('opacity')
-
-            if(nextSquareOpacity ===  '1')
-            {   
-                let nextSquare= document.getElementById(position[0]+(row-1))
-                nextSquare.style.opacity='0.5'
-
-                //to move to the movement area
-                nextSquare.addEventListener('click',movePawnNextSquare)
-                function movePawnNextSquare(eventDetails) {
-
-                    // eventDetails.stopPropogation()
-
-                    //1.clear backgrounds
-                    nextSquare.style.opacity='1'
-                    nextNextSquare.style.opacity='1'
-
-                    //2. move pawn element
-                    nextSquare.append(chessPieces[position][$PieceElement])
-                    chessPieces[position][$parentElement].innerHTML=''
-
-                    nextSquare.removeEventListener('click',movePawnNextSquare)
-                }
-            }
-            else
-            {
-                nextSquare.style.opacity='1'
-            }
-
-                //nextNext position
-            if( checkValidToMove( `${position[0]+(row-2)}`,"down" ) )
-            {
-                let nextNextSquareOpacity = window.getComputedStyle(nextNextSquare).getPropertyValue('opacity')
-
-                if(nextNextSquareOpacity === '1')
-                {
-                    nextNextSquare.style.opacity='0.5'
-                }
-                else
-                {
-                    nextNextSquare.style.opacity='1'
-                }
-            }
-        }
-        
-        //cut next diagonal piece,if
+//cut next diagonal piece,if
             //right
             // console.log( typeof `${chessSquares[position]}`)
             
@@ -582,89 +561,3 @@ function setPawnProperties(pawnId) {
             //     leftDiagonalElement.innerHTML= JSON.stringify(chessSquares[position])
             //     chessSquares[position].innerHTML=''
             // }
-    }
-    //white
-    else
-    {
-        //any blocks in straight line
-        if( checkValidToMove(`${position[0]+(row+1)}`,"up") )
-        {
-
-            let nextSquare= document.getElementById(`${position[0]+(row+1)}`)
-            let nextSquareOpacity = window.getComputedStyle(nextSquare).getPropertyValue('opacity')
-
-            if(nextSquareOpacity === '1')
-             {
-                nextSquare.style.opacity='0.5'
-             }
-            else
-            {
-                nextSquare.style.opacity='1'
-            }
-
-            if( checkValidToMove(`${position[0]+(row+2)}`,"up") )
-            {
-
-                let nextNextSquare = document.getElementById(`${position[0]+(row+2)}`)
-                let nextNextSquareOpacity = window.getComputedStyle(nextNextSquare).getPropertyValue('opacity')
-
-                if(nextNextSquareOpacity === '1')
-                {
-                    nextNextSquare.style.opacity='0.5'
-                }
-                else
-                {
-                    nextNextSquare.style.opacity='1'
-                }
-            }
-        }
-    }
-
-
-    
-}
-
-
-
-//mics -----------------------
-function checkValidToMove(position,direction) {
-
-    let col=position[0].charCodeAt(0)
-    let row= Number(position[1])
-
-
-    if( direction==="down" )
-    {
-        if( (row)>=1 &&  document.getElementById( `${position}` ).childNodes.length<=0 )
-            return true
-        else
-            return false
-    }
-    else if( direction==="up" )
-    {
-        if ((row)<=8 &&  document.getElementById( `${position}` ).childNodes.length<=0) {
-            return true
-        } else {
-            return false
-        }
-    }
-    else if( direction==="left" )
-    {
-        if( col>='a'.charCodeAt(0) && document.getElementById( `${position}` ).childNodes.length<=0){
-            return true
-        }
-        else{
-            return false
-        }
-    }
-    else //ryt
-    {
-        if( col<='h'.charCodeAt(0) && document.getElementById( `${position}` ).childNodes.length<=0){
-            return true
-        }
-        else{
-            return false
-        }
-    }
-    
-}
