@@ -1,5 +1,6 @@
 $.getScript("functions.js")
 
+//global variables -----------------------
 var $chessBoard=document.getElementById("chessBoard") //html element
 var chessPieces={}/* 
                     pieceid: {
@@ -7,18 +8,16 @@ var chessPieces={}/*
                         $squareElement(position): <></>,         //parent element,dynamic
                         parentColor: color
                     }*/
+var currentPlayerColor="white"      //to toggle between players to move
 
-console.log("test1")
-
-
-document.addEventListener("DOMContentLoaded",setChessBoardAndPieces)
+//start of chess game
+document.addEventListener("DOMContentLoaded",setChessBoardAndPieces) 
 
 function setChessBoardAndPieces(eventDetails) {
     
     
     //1. setting chess board
     setChessBoard()
-    console.log($chessBoard) 
 
     //2. pieces and properties
     setPiecesAndProperties()
