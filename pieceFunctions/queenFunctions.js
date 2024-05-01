@@ -248,7 +248,7 @@ function queenHightlightMovesToMove($currentPosition,position,queenId)
 
     if( currentOpacity == '1') //highlight
     {
-        $currentPosition.style.opacity='0.6'
+        $currentPosition.style.opacity='0.4'
 
         $currentPosition.position=position //set vars to access during event
         $currentPosition.queenId=queenId
@@ -450,7 +450,22 @@ function queenRemovehighlightedAreas($sourcePosition,$targetPosition)
         currentSquareId = String.fromCharCode(j) + i
         $currentSquare = document.getElementById(currentSquareId)
 
-        
+        if($currentSquare.childNodes.length>0 && $currentSquare.id!==targetPositionId)
+        {
+            //remove event listener for cur opp piece                                   ***
+            if($currentSquare.style.backgroundColor==='grey')
+            {
+                let oppPieceId = $currentSquare.childNodes[0].id
+
+                $currentSquare.style.backgroundColor = chessPieces[oppPieceId]["parentColor"]
+                $currentSquare.removeEventListener("click" , queenCutPiece ) 
+            }
+
+            break
+        }
+
+        $currentSquare.removeEventListener("click",queenMoveToTarget)
+        $currentSquare.style.opacity='1'
     }
 }
 
