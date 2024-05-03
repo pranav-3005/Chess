@@ -3,10 +3,11 @@ $.getScript("./pieceFunctions/rookFunctions.js")
 $.getScript("./pieceFunctions/knightFunctions.js")
 $.getScript("./pieceFunctions/bishopFunctions.js")
 $.getScript("./pieceFunctions/queenFunctions.js")
+$.getScript("./pieceFunctions/kingFunctions.js")
 
 
 // "rgb(148,96,44)","rgb(231,204,177)" black,white
-
+var path=[]
 
 function setChessBoard() {
 
@@ -109,60 +110,176 @@ function mouseout(eventDetails) {
 
 //pieces --------------
 
-function setKings() {
 
-    //black
-    let $piece =document.createElement('div')
-    $piece.innerHTML='<i class="fa-solid fa-chess-king" style="font-size:70px;"></i>'
+function checkFunction(KingColor , kingPositionId, opponentPieceId ,direction)
+{
+    alert(`Check for ${KingColor}`)
+    
+    let $kingSquare = document.getElementById(kingPositionId)
+    let $opponentPieceSquare = document.getElementById( chessPieces[opponentPieceId]["$parentElement"].id )
 
-    $piece.setAttribute('id','blackKing')
-    $piece.setAttribute('class','chessPiece')
+    let $king = $kingSquare.childNodes[0]
+    let $opponentPiece = $opponentPieceSquare.childNodes[0]
 
-    $piece.style.cssText=`display:flex;
-                        justify-content:center;
-                        align-items:center;`
-
-    let $square=document.getElementById('d8')
-    $square.append($piece)
-
-    chessPieces[`${$piece.id}`] = {
-        $pieceElement : $piece,
-        $parentElement : $square,
-        parentColor : $square.style.backgroundColor
-    }
-
-    //highlight the square
-    $square.addEventListener("mouseover",mouseover)
-    $square.addEventListener("mouseout",mouseout)
+    chessPieces[$king.id]["isUnderCheck"] = true            //***
 
     
- 
 
-    //2nd - white
-    $piece =document.createElement('div')
-    $piece.innerHTML='<i class="fa-solid fa-chess-king" style="font-size:70px; color:white"></i>'
+    let oppRow = Number($opponentPieceSquare.id[1])
+    let oppCol = $opponentPieceSquare.id[0].charCodeAt(0)
 
-    $piece.setAttribute('id','whiteKing')
-    $piece.setAttribute('class','chessPiece')
+    let kingRow = Number($kingSquare.id[1])
+    let kingCol = $kingSquare.id[0].charCodeAt(0)
 
-    $piece.style.cssText=`display:flex;
-                        justify-content:center;
-                        align-items:center;`
+    path.length=0
+    path = getPath(oppRow,oppCol,kingRow,kingCol,direction)
 
-    $square=document.getElementById('d1')
-    $square.append($piece)
-
-    chessPieces[`${$piece.id}`] = {
-        $pieceElement : $piece,
-        $parentElement : $square,
-        parentColor : $square.style.backgroundColor
-    }
-
-    //highlight the square
-    $square.addEventListener("mouseover",mouseover)
-    $square.addEventListener("mouseout",mouseout)
-
+    console.log("path : ",path)
     
+
+    // checkForBlocks(path,KingColor)
+
+
     
 }
 
+function isValidToMoveWhileCheck(squareId,currentColor)
+{
+    if(chessPieces[ currentColor+"King" ]["isUnderCheck"]===false || (path.length>1 && path.includes(squareId))  )
+    {
+        // chessPieces[ currentColor+"King" ]["isUnderCheck"]=false 
+        return true
+    }    
+
+    return false
+}
+//need ot do changes for knight
+// function checkForBlocks(path,KingColor)
+// {
+//     for( let pathId of path)
+//     {
+//         checkForPawn(pathId,KingColor)
+//     }
+// }
+
+function getPath(oppRow,oppCol,kingRow,kingCol,direction)
+{
+    let path=[]
+
+    //top
+    if(direction=="top")
+    {
+        for(let i=oppRow;i<kingRow;i++)
+        {
+            path.push(String.fromCharCode(oppCol)+(i))
+        }
+    }
+
+    //top right
+    if(direction=="topRight")
+    {
+        for(let i=oppRow,j=oppCol ; i<kingRow && j<kingCol ; i++,j++)
+        {
+            path.push(String.fromCharCode(j)+(i))
+        }
+    }
+
+    //right
+    if(direction=="right")
+    {
+        for(let j=oppCol; j<kingCol ; j++)
+        {
+            path.push(String.fromCharCode(j)+(oppRow))
+        }
+    }
+
+    //bottom right
+    if(direction=="bottomRight")
+    {
+        for(let i=oppRow,j=oppCol; i>kingRow && j<kingCol ; i--,j++)
+        {
+            path.push(String.fromCharCode(j)+(i))
+        }
+    }
+
+    //bottom
+    if(direction=="bottom")
+    {
+        for(let i=oppRow ; i>kingRow ;i--)
+        {
+            path.push(String.fromCharCode(oppCol)+(i))
+        }
+    }
+
+    //bottom left
+    if(direction=="bottomLeft")
+    {
+        for(let i=oppRow,j=oppCol ;i>kingRow && j>kingCol ; i--,j--)
+        {
+            path.push(String.fromCharCode(j)+(i))
+        }
+    }
+
+    //left
+    if(direction=="left")
+    {
+        for(let j=oppCol ; j>kingCol ; j--)
+        {
+            path.push(String.fromCharCode(j)+(oppRow))
+        }
+    }
+
+    //top left
+    if(direction=="topLeft")
+    {
+        for(let i=oppRow,j=oppCol ; i<kingRow && j>kingCol ; i++,j--)
+        {
+            path.push(String.fromCharCode(j)+(i))
+        }
+    }   
+    return path
+
+}
+
+
+//blocks
+// function checkForPawn(pathId,currentColor)
+// {
+//     let row = Number(pathId[1])
+//     let col = pathId[0].charCodeAt(0)
+//     if(currentColor==="black")
+//     {
+//         let $bottomLeftSquare = document.getElementById(String.fromCharCode(col-1)+(row-1))
+//         let $bottomRightSquare = document.getElementById(String.fromCharCode(col+1)+(row-1))
+//         let $bottomSquare = document.getElementById(String.fromCharCode(col)+(row-1))
+
+//         if(document.getElementById(pathId).childNodes.length>0)
+//         {
+//             if(col-1>='a'.charCodeAt(0) && row-1>=1 && $bottomLeftSquare.childNodes.length>0 && $bottomLeftSquare.childNodes[0].id.includes(currentColor) && $bottomLeftSquare.childNodes[0].id.includes("Pawn"))
+//             {
+//                 $bottomLeftSquare.childNodes[0].addEventListener("click",setPawnProperties,{capture:true}) 
+//             }
+
+//         }
+//     }
+//     else
+//     {
+
+//     }
+// }
+
+
+
+
+
+
+//--------------- mics
+//lock other pieces,which cannot block opp pieces
+    // for(let pieceId in chessPieces)
+    // {
+    //     if(pieceId.includes(KingColor) && !(pieceId.includes("King")))
+    //     {
+    //         if(pieceId.includes("Pawn"))
+    //             document.getElementById(pieceId).removeEventListener("click",setPawnProperties,{capture:true}) 
+    //     }
+    // }

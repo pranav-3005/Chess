@@ -303,7 +303,7 @@ function rookHightLightMoves($currentPosition,position,rookId)
 
     if( currentOpacity == '1') //highlight
     {
-        $currentPosition.style.opacity='0.6'
+        $currentPosition.style.opacity= highlightMovesOpacity
 
         $currentPosition.position=position //set vars to access during event
         $currentPosition.rookId=rookId
@@ -426,6 +426,67 @@ function rookRemovehighlightedAreas($sourcePosition,$targetPosition) {
     
 }
 
+function rookCheckForKing($currentSquare,position,rookId)
+{
+    let col=position[0].charCodeAt(0)
+    let row= Number(position[1])
+    let currentColor= rookId.slice(0,5)
+
+    //checking all 4 diagonals to move or cut
+    let $currentPosition = ''
+
+    //top
+    for(let i=row+1;i<=8;i++)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(col) + (i))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            if($currentPosition.childNodes.length>0)
+                break
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,rookId,"top")
+        }
+        else if($currentPosition.childNodes.length>0)
+            break
+
+    }
+
+    //right
+    for(let j=col+1;j<='h'.charCodeAt(0);j++)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(j) + (row))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,rookId,"right")
+        }
+        else if($currentPosition.childNodes.length>0)
+            break
+    }
+
+    //down
+    for(let i=row-1;i>=1;i--)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(col) + (i))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,rookId,"down")
+        }
+        else if($currentPosition.childNodes.length>0)
+            break
+    }
+
+    //left
+    for(let j=col-1;j>='a'.charCodeAt(0);j--)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(j) + (row))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,rookId,"left")
+        }
+        else if($currentPosition.childNodes.length>0)
+            break
+    }
+}
+
 //eventListener functions -------------------------------
 //4.1.1
 function rookMoveToTarget(eventDetails)
@@ -457,6 +518,11 @@ function rookMoveToTarget(eventDetails)
     //remove event listeners for highlighted areas and to cut opp piece                              ***
     rookRemovehighlightedAreas($sourcePosition,$targetPosition)
 
+    rookCheckForKing($targetPosition , $targetPosition.id , rookId)
+
+    let currentColor = (rookId.slice(0,5)==="white") ? "black" : "white" 
+    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
+
     //to switch moves (black->white,white->black)
     if(rookId.includes("black"))
         currentPlayerColor="white"
@@ -464,7 +530,7 @@ function rookMoveToTarget(eventDetails)
         currentPlayerColor="black"
 }
 //4.2
-function rookCutPiece()   
+function rookCutPiece(eventDetails)   
 {   
     let sourcePositionId = this.sourcePositionId
     let targetPositionId = this.id
@@ -494,7 +560,12 @@ function rookCutPiece()
     rookRemovehighlightedAreas($sourceSquare,$targetSquare)
 
     //remove event listener at target
-    $targetSquare.removeEventListener("click" , rookCutPiece )  
+    $targetSquare.removeEventListener("click" , rookCutPiece ) 
+    
+    rookCheckForKing($targetSquare , targetPositionId , rookId)
+
+    let currentColor = (rookId.slice(0,5)==="white") ? "black" : "white" 
+    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
 
     //to switch moves (black->white,white->black)
     if(rookId.includes("black"))

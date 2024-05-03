@@ -248,7 +248,7 @@ function queenHightlightMovesToMove($currentPosition,position,queenId)
 
     if( currentOpacity == '1') //highlight
     {
-        $currentPosition.style.opacity='0.4'
+        $currentPosition.style.opacity= highlightMovesOpacity 
 
         $currentPosition.position=position //set vars to access during event
         $currentPosition.queenId=queenId
@@ -469,6 +469,112 @@ function queenRemovehighlightedAreas($sourcePosition,$targetPosition)
     }
 }
 
+function queenCheckForKing($currentSquare,position,queenId)
+{
+    let col=position[0].charCodeAt(0)
+    let row= Number(position[1])
+    let currentColor= queenId.slice(0,5)
+
+    //checking all 8 directions to move or cut
+    let $currentPosition = ''
+
+    //top
+    for(let i=row+1;i<=8;i++)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(col) + (i))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,queenId,"topLeft")
+        }
+        else if($currentPosition.childNodes.length>0)
+            break
+    }
+
+    //top right
+    for(let i=row+1,j=col+1 ; i<=8 && j<='h'.charCodeAt(0) ; i++,j++)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(j) + (i))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,queenId,"topRight")
+        }
+        else if($currentPosition.childNodes.length>0)
+            break
+    }
+
+    //right
+    for(let j=col+1; j<='h'.charCodeAt(0) ; j++)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(j) + (row))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,queenId,"right")
+        }
+        else if($currentPosition.childNodes.length>0)
+            break
+    }
+
+    //bottom right
+    for(let i=row-1,j=col+1; i>=1 && j<='h'.charCodeAt(0) ; i--,j++)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(j) + (i))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,queenId,"bottomRight")
+        }
+        else if($currentPosition.childNodes.length>0)
+            break
+    }
+
+    //bottom
+    for(let i=row-1 ; i>=1 ;i--)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(col) + (i))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,queenId,"bottom")
+        }
+        else if($currentPosition.childNodes.length>0)
+            break
+    }
+
+    //bottom left
+    for(let i=row-1,j=col-1 ;i>=1 && j>='a'.charCodeAt(0) ; i--,j--)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(j) + (i))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,queenId,"bottomLeft")
+        }
+        else if($currentPosition.childNodes.length>0)
+            break
+    }
+
+    //left
+    for(let j=col-1 ; j>='a'.charCodeAt(0) ; j--)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(j) + (row))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,queenId,"left")
+        }
+        else if($currentPosition.childNodes.length>0)
+            break
+    }
+
+    //top left
+    for(let i=row+1,j=col-1 ; i<=8 && j>='a'.charCodeAt(0) ; i++,j--)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(j) + (i))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,queenId,"topLeft")
+        }
+        else if($currentPosition.childNodes.length>0)
+            break
+    }
+}
+
 //event listener functions -----------------------
 function queenCutPiece()
 {
@@ -501,6 +607,11 @@ function queenCutPiece()
 
     //remove event listener at target
     $targetSquare.removeEventListener("click" , queenCutPiece )  
+
+    queenCheckForKing($targetSquare , targetPositionId , queenId)
+
+    let currentColor = (queenId.slice(0,5)==="white") ? "black" : "white" 
+    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
 
     //to switch moves (black->white,white->black)
     if(queenId.includes("black"))
@@ -537,6 +648,11 @@ function queenMoveToTarget()
 
     //remove event listeners for highlighted areas and to cut opp piece                              ***
     queenRemovehighlightedAreas($sourcePosition,$targetPosition)
+
+    queenCheckForKing($targetPosition , targetPositionId , queenId)
+
+    let currentColor = (queenId.slice(0,5)==="white") ? "black" : "white" 
+    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
 
     //to switch moves (black->white,white->black)
     if(queenId.includes("black"))

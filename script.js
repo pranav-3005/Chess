@@ -9,6 +9,7 @@ var chessPieces={}/*
                         parentColor: color
                     }*/
 var currentPlayerColor="white"      //to toggle between players to move
+var highlightMovesOpacity='0.4'
 
 //start of chess game
 document.addEventListener("DOMContentLoaded",setChessBoardAndPieces) 

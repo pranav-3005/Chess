@@ -256,7 +256,7 @@ function knightMoves($currentPosition,currentColor,oppPieces,position,knightId)
 
         if( currentOpacity == '1') //highlight
         {
-            $currentPosition.style.opacity='0.6'
+            $currentPosition.style.opacity= highlightMovesOpacity
 
             $currentPosition.position=position //set vars to access during event
             $currentPosition.knightId=knightId
@@ -283,6 +283,7 @@ function knightRemovehighlightedAreas($sourcePosition,$targetPosition)
     let row= Number(sourcePositionId[1])
 
     //check all the 8 positions
+    let $currentSquare= ''
 
     //topLeft12  [row+1][col-2]
     if(col-2>='a'.charCodeAt(0) && row+1<=8)
@@ -464,7 +465,7 @@ function knightCutPiece(eventDetails)
 
 }
 
-function knightMoveToTarget() {
+function knightMoveToTarget(eventDetails) {
     let $sourcePosition = document.getElementById(this.position)
     let $currentKnight = document.getElementById(this.knightId)
     let knightId=this.knightId

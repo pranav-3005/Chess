@@ -37,7 +37,7 @@ function setBlackPawn(c) {
         $square.addEventListener("mouseout",mouseout)
 
         //set pawn properties
-        $piece.addEventListener("click",(eventDetails)=>{setPawnProperties(eventDetails,$piece.id)},{capture:true}) 
+        $piece.addEventListener("click",setPawnProperties,{capture:true}) 
 }
 function setWhitePawn(c) {
    
@@ -69,13 +69,14 @@ function setWhitePawn(c) {
     $square.addEventListener("mouseout",mouseout)
 
     //set piece properties
-    $piece.addEventListener("click",(eventDetails)=>{setPawnProperties(eventDetails,$piece.id)}) 
+    $piece.addEventListener("click",setPawnProperties,{capture:true})  
 }
 
 //properties ------------------------------
 //2.
-function setPawnProperties(eventDetails,pawnId) {
+function setPawnProperties(eventDetails) {
 
+    let pawnId=this.id
     let position=chessPieces[`${pawnId}`]['$parentElement'].id
     let col=position[0].charCodeAt(0)  //a,b,c,d,e,f,g,h
     let row= Number(position[1]) //1,2,3,4,5,6,7,8
@@ -104,8 +105,8 @@ function pawnCheckNextSquareToMove(position,pawnId) {
     let col=position[0].charCodeAt(0)
     let row= Number(position[1])
     
-    let nextSquare=''
-    let nextNextSquare=''
+    let $nextSquare=''
+    let $next$=''
     let nextSquareOpacity=''
     let direction=''
 
@@ -113,86 +114,89 @@ function pawnCheckNextSquareToMove(position,pawnId) {
     //set variables
     if(pawnId.includes("black") )  //black
     {
-        nextSquare= document.getElementById(position[0]+(row-1))
-        nextNextSquare= document.getElementById(position[0]+(row-2))
-        nextSquareOpacity = window.getComputedStyle(nextSquare).getPropertyValue('opacity')
+        $nextSquare= document.getElementById(position[0]+(row-1))
+        $nextNextSquare= document.getElementById(position[0]+(row-2))
+        nextSquareOpacity = window.getComputedStyle($nextSquare).getPropertyValue('opacity')
         direction= "down"
     }
     else                            //white
     {
-        nextSquare= document.getElementById(position[0]+(row+1))
-        nextNextSquare= document.getElementById(position[0]+(row+2))
-        nextSquareOpacity = window.getComputedStyle(nextSquare).getPropertyValue('opacity')
+        $nextSquare= document.getElementById(position[0]+(row+1))
+        $nextNextSquare= document.getElementById(position[0]+(row+2))
+        nextSquareOpacity = window.getComputedStyle($nextSquare).getPropertyValue('opacity')
         direction= "up"
     }
     
-    if(nextSquare==null)
+    if($nextSquare==null)
         return
 
-    nextSquare.pawnId=pawnId
-    nextSquare.position=position
-    nextSquare.nextNextSquare=nextNextSquare
-    nextSquare.position=position
+    $nextSquare.pawnId=pawnId
+    $nextSquare.position=position
+    $nextSquare.$nextNextSquare=$nextNextSquare
+    $nextSquare.position=position
     
     if(chessPieces[pawnId]["isFirstMoveDone"]==false)
     {
-        nextNextSquare.pawnId=pawnId
-        nextNextSquare.position=position
-        nextNextSquare.nextSquare=nextSquare
-        nextNextSquare.position=position
+        $nextNextSquare.pawnId=pawnId
+        $nextNextSquare.position=position
+        $nextNextSquare.$nextSquare=$nextSquare
+        $nextNextSquare.position=position
     }
 
 
     //highlight movable areas and move
-    if( pawnCheckValidToMove(`${nextSquare.id}`,direction) )
+    if( pawnCheckValidToMove(`${$nextSquare.id}`,direction) && isValidToMoveWhileCheck($nextSquare.id,pawnId.slice(0,5)) )
     {
         if(nextSquareOpacity ===  '1')
         {   
             //highlight
-            nextSquare.style.opacity='0.5'
+            $nextSquare.style.opacity= highlightMovesOpacity
 
             //move to next square
-            if(nextSquare.style.opacity === '0.5')
+            if($nextSquare.style.opacity === highlightMovesOpacity)
             {
-                nextSquare.addEventListener('click', pawnNextFunction )
+                $nextSquare.addEventListener('click', pawnNextFunction )
             }
         }
         else
         {
-            nextSquare.style.opacity='1'
-            nextSquare.removeEventListener('click', pawnNextFunction )
+            $nextSquare.style.opacity='1'
+            $nextSquare.removeEventListener('click', pawnNextFunction )
         }
-
-        if(!chessPieces[pawnId]["isFirstMoveDone"])
-            pawnCheckNextNextSquareToMove(position,nextSquare,nextNextSquare,pawnId,direction)
     }
+
+    if(!chessPieces[pawnId]["isFirstMoveDone"] && isValidToMoveWhileCheck($nextNextSquare.id,pawnId.slice(0,5)))
+    {
+        pawnCheckNextNextSquareToMove(position,$nextSquare,$nextNextSquare,pawnId,direction)
+    }    
 
 }
 
 //3.1.2
-function pawnCheckNextNextSquareToMove(position,nextSquare,nextNextSquare,pawnId,direction) {
+function pawnCheckNextNextSquareToMove(position,$nextSquare,$nextNextSquare,pawnId,direction) {
     
     let col=position[0].charCodeAt(0)
     let row= Number(position[1])
-    let nextNextSquareOpacity = window.getComputedStyle(nextNextSquare).getPropertyValue('opacity')
+    let nextNextSquareOpacity = window.getComputedStyle($nextNextSquare).getPropertyValue('opacity')
 
     //highlight and move to nextNextSquare
-    if( pawnCheckValidToMove( `${nextNextSquare.id}`,direction ) )
+    if( pawnCheckValidToMove( `${$nextNextSquare.id}`,direction ) )
     {
         if(nextNextSquareOpacity === '1')
         {
-            nextNextSquare.style.opacity='0.5'
+            $nextNextSquare.style.opacity=highlightMovesOpacity
 
             //move to nextNext square
-            if(nextNextSquare.style.opacity === '0.5')
+            if($nextNextSquare.style.opacity === highlightMovesOpacity)
             {
-                nextNextSquare.addEventListener('click', pawnNextNextFunction )
+                if( isValidToMoveWhileCheck($nextSquare.id,pawnId.slice(0,5)) )
+                    $nextNextSquare.addEventListener('click', pawnNextNextFunction )
             }
         }
         else
         {
-            nextNextSquare.style.opacity='1'
-            nextNextSquare.removeEventListener('click', pawnNextNextFunction )
+            $nextNextSquare.style.opacity='1'
+            $nextNextSquare.removeEventListener('click', pawnNextNextFunction )
         }
     }
 }
@@ -211,9 +215,9 @@ function pawnCheckPossiblePieceToCut(position,pawnId) {
     {
         
         let bottomLeft = String.fromCharCode(col-1) + (row-1)
-        let bottomRight = String.fromCharCode(col+1) + (row-1)
+        let bottomRight = String.fromCharCode(col+1) + (row-1) 
 
-        if(pawnCheckValidToCut("black",bottomLeft,"bottomLeft"))
+        if(pawnCheckValidToCut("black",bottomLeft,"bottomLeft") && isValidToMoveWhileCheck(bottomLeft,pawnId.slice(0,5)) )
         {
             let bottomLeftOriginColor= chessPieces[document.getElementById(bottomLeft).childNodes[0].id]['parentColor']
 
@@ -245,7 +249,7 @@ function pawnCheckPossiblePieceToCut(position,pawnId) {
             }
                    
         }
-        if(pawnCheckValidToCut("black",bottomRight,"bottomRight"))
+        if(pawnCheckValidToCut("black",bottomRight,"bottomRight") && isValidToMoveWhileCheck(bottomRight,pawnId.slice(0,5)))
         {
             let bottomRightOriginColor= chessPieces[document.getElementById(bottomRight).childNodes[0].id]['parentColor']
 
@@ -280,7 +284,7 @@ function pawnCheckPossiblePieceToCut(position,pawnId) {
         let topLeft = String.fromCharCode(col-1) + (row+1)
         let topRight = String.fromCharCode(col+1) + (row+1)
 
-        if(pawnCheckValidToCut("white",topLeft,"topLeft"))
+        if(pawnCheckValidToCut("white",topLeft,"topLeft") && isValidToMoveWhileCheck(topLeft,pawnId.slice(0,5)) )
         {
             let topLeftOriginColor= chessPieces[document.getElementById(topLeft).childNodes[0].id]['parentColor']
 
@@ -310,7 +314,7 @@ function pawnCheckPossiblePieceToCut(position,pawnId) {
             }  
         }
 
-        if(pawnCheckValidToCut("white",topRight,"topRight"))
+        if(pawnCheckValidToCut("white",topRight,"topRight") && isValidToMoveWhileCheck(topRight,pawnId.slice(0,5)) )
         {
             let topRightOriginColor= chessPieces[document.getElementById(topRight).childNodes[0].id]['parentColor']
 
@@ -342,64 +346,70 @@ function pawnCheckPossiblePieceToCut(position,pawnId) {
 
 }
 
-function movePawnNextSquare(eventDetails,nextSquare,nextNextSquare,pawnId,position) {
+function movePawnNextSquare(eventDetails,$nextSquare,$nextNextSquare,pawnId,position) {
 
     let col=position[0].charCodeAt(0)
     let row= Number(position[1])
 
     //if it contains elem or not
-    if(nextSquare.childNodes.length>0)
+    if($nextSquare.childNodes.length>0)
         return
 
     //1.clear backgrounds
-    nextSquare.style.opacity='1'
-    nextNextSquare.style.opacity='1'
+    $nextSquare.style.opacity='1'
+    $nextNextSquare.style.opacity='1'
 
     //remove highlight on crnt square
     chessPieces[pawnId]["$parentElement"].removeEventListener("mouseover",mouseover)
     chessPieces[pawnId]["$parentElement"].removeEventListener("mouseout",mouseout)
 
     //2. move pawn element
-    nextSquare.append(chessPieces[pawnId]["$pieceElement"])
+    $nextSquare.append(chessPieces[pawnId]["$pieceElement"])
     chessPieces[pawnId]["$parentElement"].innerHTML=''
 
     //update obj
-    chessPieces[pawnId]['$parentElement']=nextSquare
-    chessPieces[pawnId]['parentColor']=nextSquare.style.backgroundColor
+    chessPieces[pawnId]['$parentElement']=$nextSquare
+    chessPieces[pawnId]['parentColor']=$nextSquare.style.backgroundColor
 
     //higlight nextSquare
-    nextSquare.addEventListener("mouseover",mouseover)
-    nextSquare.addEventListener("mouseout",mouseout)
+    $nextSquare.addEventListener("mouseover",mouseover)
+    $nextSquare.addEventListener("mouseout",mouseout)
 
     if(!chessPieces[pawnId]["isFirstMoveDone"])
     {
         chessPieces[pawnId]["isFirstMoveDone"]=true 
-        nextNextSquare.removeEventListener('click', pawnNextNextFunction )
+        $nextNextSquare.removeEventListener('click', pawnNextNextFunction )
     }
 
     //after moved,remove event listeners
-    nextSquare.removeEventListener('click', pawnNextFunction )
-    nextNextSquare.removeEventListener('click', pawnNextNextFunction )
+    $nextSquare.removeEventListener('click', pawnNextFunction )
+    $nextNextSquare.removeEventListener('click', pawnNextNextFunction )
 
     pawnRemoveEventListenersToCutOpponentPiece(position,pawnId,row,col)
+
+    //check for king
+    pawnCheckForKing($nextSquare,$nextSquare.id,pawnId)
+    
+    let currentColor = (pawnId.slice(0,5)==="white") ? "black" : "white" 
+    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false 
 
     if(pawnId.includes("black"))
         currentPlayerColor="white"
     else
         currentPlayerColor="black"
 }
-function movePawnNextNextSquare(eventDetails,nextSquare,nextNextSquare,pawnId,position) {
+function movePawnNextNextSquare(eventDetails,$nextSquare,$nextNextSquare,pawnId,position) {
 
     let col=position[0].charCodeAt(0)
     let row= Number(position[1])
 
     //if it contains elem or not
-    if(nextNextSquare.childNodes.length>0)
+    if($nextNextSquare.childNodes.length>0)
         return
     
     //1.clear backgrounds
-    nextSquare.style.opacity='1'
-    nextNextSquare.style.opacity='1'
+    $nextSquare.style.opacity='1'
+    $nextNextSquare.style.opacity='1'
 
     //remove highlight on crnt square
     let $currentSquare = chessPieces[pawnId]["$parentElement"]
@@ -407,15 +417,15 @@ function movePawnNextNextSquare(eventDetails,nextSquare,nextNextSquare,pawnId,po
     $currentSquare.removeEventListener("mouseout",mouseout)
 
     //2. move pawn element
-    nextNextSquare.append(chessPieces[pawnId]["$pieceElement"])
+    $nextNextSquare.append(chessPieces[pawnId]["$pieceElement"])
     chessPieces[pawnId]["$parentElement"].innerHTML=''
 
     //update in obj
-    chessPieces[pawnId]['$parentElement']=nextNextSquare
-    chessPieces[pawnId]['parentColor']=nextNextSquare.style.backgroundColor
+    chessPieces[pawnId]['$parentElement']=$nextNextSquare
+    chessPieces[pawnId]['parentColor']=$nextNextSquare.style.backgroundColor
     
-    nextNextSquare.addEventListener("mouseover",mouseover)
-    nextNextSquare.addEventListener("mouseout",mouseout)
+    $nextNextSquare.addEventListener("mouseover",mouseover)
+    $nextNextSquare.addEventListener("mouseout",mouseout)
 
     if(!chessPieces[pawnId]["isFirstMoveDone"])
     {
@@ -425,10 +435,15 @@ function movePawnNextNextSquare(eventDetails,nextSquare,nextNextSquare,pawnId,po
     }
 
     //after moved,remove event listeners
-    nextNextSquare.removeEventListener('click', pawnNextNextFunction )
-    nextSquare.removeEventListener('click', pawnNextFunction )
+    $nextNextSquare.removeEventListener('click', pawnNextNextFunction )
+    $nextSquare.removeEventListener('click', pawnNextFunction )
 
     pawnRemoveEventListenersToCutOpponentPiece(position,pawnId,row,col)
+
+    pawnCheckForKing($nextNextSquare,$nextNextSquare.id,pawnId)
+
+    let currentColor = (pawnId.slice(0,5)==="white") ? "black" : "white" 
+    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false 
 
     if(pawnId.includes("black"))
         currentPlayerColor="white"
@@ -440,45 +455,91 @@ function pawnRemoveEventListenersToCutOpponentPiece(position,pawnId,row,col)
 {
     if(pawnId.includes("black"))
     {
-        let bottomLeft=document.getElementById(String.fromCharCode(col-1)+(row-1))
-        let bottomRight=document.getElementById(String.fromCharCode(col+1)+(row-1))
-        //bottomLeft
-        if(col-1>='a'.charCodeAt(0) && (row-1)>=1 && bottomLeft.childNodes.length>0 && bottomLeft.style.backgroundColor==="grey")
+        let $bottomLeft=document.getElementById(String.fromCharCode(col-1)+(row-1))
+        let $bottomRight=document.getElementById(String.fromCharCode(col+1)+(row-1))
+        //$bottomLeft
+        if(col-1>='a'.charCodeAt(0) && (row-1)>=1 && $bottomLeft.childNodes.length>0 && $bottomLeft.style.backgroundColor==="grey")
         {
-                bottomLeft.childNodes[0].removeEventListener("click",pawnCutPieceBottomLeft,{once:true,capture:true})
-                bottomLeft.style.backgroundColor= chessPieces[bottomLeft.childNodes[0].id]["parentColor"]
+                $bottomLeft.childNodes[0].removeEventListener("click",pawnCutPieceBottomLeft,{once:true,capture:true})
+                $bottomLeft.style.backgroundColor= chessPieces[$bottomLeft.childNodes[0].id]["parentColor"]
             }
         
         //bottomRyt
-        if(col+1<='h'.charCodeAt(0) && (row-1)>=1 && bottomRight.childNodes.length>0 && bottomRight.style.backgroundColor==="grey")
+        if(col+1<='h'.charCodeAt(0) && (row-1)>=1 && $bottomRight.childNodes.length>0 && $bottomRight.style.backgroundColor==="grey")
         {
-            bottomRight.childNodes[0].removeEventListener("click", pawnCutPieceBottomRight , {once:true,capture:true})
-            bottomRight.style.backgroundColor= chessPieces[bottomRight.childNodes[0].id]["parentColor"]
+            $bottomRight.childNodes[0].removeEventListener("click", pawnCutPieceBottomRight , {once:true,capture:true})
+            $bottomRight.style.backgroundColor= chessPieces[$bottomRight.childNodes[0].id]["parentColor"]
         }
     }
     else
     {
-        let topLeft=document.getElementById(String.fromCharCode(col-1)+(row+1))
-        let topRight=document.getElementById(String.fromCharCode(col+1)+(row+1))
+        let $topLeft=document.getElementById(String.fromCharCode(col-1)+(row+1))
+        let $topRight=document.getElementById(String.fromCharCode(col+1)+(row+1))
 
-        // console.log(topLeft.childNodes.length)
-        //topLeft
-        if(col-1>='a'.charCodeAt(0) && (row+1)<=8 && topLeft.childNodes.length>0 && topLeft.style.backgroundColor==="grey")
+        // console.log($topLeft.childNodes.length)
+        //$topLeft
+        if(col-1>='a'.charCodeAt(0) && (row+1)<=8 && $topLeft.childNodes.length>0 && $topLeft.style.backgroundColor==="grey")
         {
-            topLeft.childNodes[0].removeEventListener("click",pawnCutPieceTopLeft,{once:true,capture:true})
-            topLeft.style.backgroundColor= chessPieces[topLeft.childNodes[0].id]["parentColor"]
+            $topLeft.childNodes[0].removeEventListener("click",pawnCutPieceTopLeft,{once:true,capture:true})
+            $topLeft.style.backgroundColor= chessPieces[$topLeft.childNodes[0].id]["parentColor"]
         }
         
         //topRyt
-        if(col+1<='h'.charCodeAt(0) && (row+1)<=8 && topRight.childNodes.length>0 && topRight.style.backgroundColor==="grey")
+        if(col+1<='h'.charCodeAt(0) && (row+1)<=8 && $topRight.childNodes.length>0 && $topRight.style.backgroundColor==="grey")
         {
-           topRight.childNodes[0].removeEventListener("click", pawnCutPieceTopRight , {once:true,capture:true})
-           topRight.style.backgroundColor= chessPieces[topRight.childNodes[0].id]["parentColor"]
+           $topRight.childNodes[0].removeEventListener("click", pawnCutPieceTopRight , {once:true,capture:true})
+           $topRight.style.backgroundColor= chessPieces[$topRight.childNodes[0].id]["parentColor"]
         }
     
     }
 }
 
+function pawnCheckForKing($currentSquare,position,pawnId)
+{
+    let col=position[0].charCodeAt(0)
+    let row= Number(position[1])
+
+    //if black
+    if(pawnId.includes("black"))
+    {
+        //bottom left
+        if(row-1>=1 && col-1>='a'.charCodeAt(0))
+        {
+            if( document.getElementById(String.fromCharCode(col-1) + (row-1)).childNodes.length>0 && document.getElementById(String.fromCharCode(col-1) + (row-1)).childNodes[0].id.includes("whiteKing"))
+            {
+                checkFunction("white",String.fromCharCode(col-1) + (row-1),pawnId,"bottomLeft")
+            }
+        }
+        //bottom ryt
+        if(row-1>=1 && col+1<='h'.charCodeAt(0))
+        {
+            if( document.getElementById(String.fromCharCode(col+1) + (row-1)).childNodes.length>0 && document.getElementById(String.fromCharCode(col+1) + (row-1)).childNodes[0].id.includes("whiteKing"))
+            {
+                checkFunction("white",String.fromCharCode(col+1) + (row-1),pawnId,"bottomRight")
+            }
+        }
+    }
+    else
+    {
+        //top left
+        if(row+1>=1 && col-1>='a'.charCodeAt(0))
+        {
+            console.log( document.getElementById(String.fromCharCode(col-1) + (row+1)),"hii" )
+            if( document.getElementById(String.fromCharCode(col-1) + (row+1)).childNodes.length>0 && document.getElementById(String.fromCharCode(col-1) + (row+1)).childNodes[0].id.includes("blackKing"))
+            {
+                checkFunction("black",String.fromCharCode(col-1) + (row+1),pawnId,"topLeft")
+            }
+        }
+        //top ryt
+        if(row+1>=1 && col+1<='h'.charCodeAt(0))
+        {
+            if( document.getElementById(String.fromCharCode(col+1) + (row+1)).childNodes.length>0 && document.getElementById(String.fromCharCode(col+1) + (row+1)).childNodes[0].id.includes("blackKing"))
+            {
+                checkFunction("black",String.fromCharCode(col+1) + (row+1),pawnId,"topRight")
+            }
+        }
+    }
+}
 
 
 //checking the position,if valid ---------------------------
@@ -651,21 +712,21 @@ function pawnCheckValidToCut(currentElementColor,position,direction) {
 //event listener functions -------------------------------------
 
 let pawnNextFunction=function(eventDetails){
-    let nextSquare=this
-    let nextNextSquare=this.nextNextSquare
+    let $nextSquare=this
+    let $nextNextSquare=this.$nextNextSquare
     let pawnId=this.pawnId
     let position=this.position
 
-    movePawnNextSquare(eventDetails,nextSquare,nextNextSquare,pawnId,position)
+    movePawnNextSquare(eventDetails,$nextSquare,$nextNextSquare,pawnId,position)
 }
 
 let pawnNextNextFunction = function(eventDetails){
-    let nextNextSquare=this
-    let nextSquare=this.nextSquare
+    let $nextNextSquare=this
+    let $nextSquare=this.$nextSquare
     let pawnId=this.pawnId
     let position=this.position
 
-    movePawnNextNextSquare(eventDetails,nextSquare,nextNextSquare,pawnId,position)
+    movePawnNextNextSquare(eventDetails,$nextSquare,$nextNextSquare,pawnId,position)
 }
 
 function  pawnCutPieceBottomLeft(eventDetails) {
@@ -715,6 +776,11 @@ function  pawnCutPieceBottomLeft(eventDetails) {
     document.getElementById(position).removeEventListener("mouseover",mouseover)
     document.getElementById(position).removeEventListener("mouseout",mouseout)
     
+    pawnCheckForKing(document.getElementById(bottomLeft),bottomLeft,pawnId)
+
+    let currentColor = (pawnId.slice(0,5)==="white") ? "black" : "white" 
+    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
+
     if(pawnId.includes("black"))
         currentPlayerColor="white"
     else
@@ -771,10 +837,17 @@ function  pawnCutPieceBottomRight(eventDetails) {
     document.getElementById(position).removeEventListener("mouseover",mouseover)
     document.getElementById(position).removeEventListener("mouseout",mouseout)
 
+    pawnCheckForKing(document.getElementById(bottomRight),bottomRight,pawnId)
+
+    let currentColor = (pawnId.slice(0,5)==="white") ? "black" : "white" 
+    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
+
     if(pawnId.includes("black"))
         currentPlayerColor="white"
     else
         currentPlayerColor="black"
+
+    
 }
 
 function  pawnCutPieceTopLeft(eventDetails) {
@@ -825,10 +898,17 @@ function  pawnCutPieceTopLeft(eventDetails) {
     document.getElementById(position).removeEventListener("mouseover",mouseover)
     document.getElementById(position).removeEventListener("mouseout",mouseout)
 
+    pawnCheckForKing(document.getElementById(topLeft),topLeft,pawnId)
+
+    let currentColor = (pawnId.slice(0,5)==="white") ? "black" : "white" 
+    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
+
     if(pawnId.includes("black"))
         currentPlayerColor="white"
     else
         currentPlayerColor="black"
+
+    
 }
 
 function  pawnCutPieceTopRight(eventDetails) {
@@ -879,10 +959,17 @@ function  pawnCutPieceTopRight(eventDetails) {
     document.getElementById(position).removeEventListener("mouseover",mouseover)
     document.getElementById(position).removeEventListener("mouseout",mouseout)
 
+    pawnCheckForKing(document.getElementById(topRight),topRight,pawnId)
+
+    let currentColor = (pawnId.slice(0,5)==="white") ? "black" : "white" 
+    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
+
     if(pawnId.includes("black"))
         currentPlayerColor="white"
     else
         currentPlayerColor="black"
+
+    
 }
 
 

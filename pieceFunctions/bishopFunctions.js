@@ -291,7 +291,7 @@ function bishopHightLightMoves($currentPosition,position,bishopId)
 
     if( currentOpacity == '1') //highlight
     {
-        $currentPosition.style.opacity='0.6'
+        $currentPosition.style.opacity= highlightMovesOpacity
 
         $currentPosition.position=position //set vars to access during event
         $currentPosition.bishopId=bishopId
@@ -419,6 +419,62 @@ function bishopRemovehighlightedAreas($sourcePosition,$targetPosition)
 
 }
 
+function bishopCheckForKing($currentSquare,position,bishopId)
+{
+    let col=position[0].charCodeAt(0)
+    let row= Number(position[1])
+    let currentColor= bishopId.slice(0,5)
+
+    //checking all 4 diagonals to move or cut
+    let $currentPosition = ''
+    //topLeft
+    for(let i=row+1,j=col-1 ; i<=8 && j>='a'.charCodeAt(0) ; i++,j--)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(j) + (i))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,bishopId,"topLeft")
+        }
+        else if($currentPosition.childNodes.length>0)
+            break
+    }
+
+    //topRight
+    for(let i=row+1,j=col+1 ; i<=8 && j<='h'.charCodeAt(0) ; i++,j++)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(j) + (i))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,bishopId,"topRight")
+        }
+        else if($currentPosition.childNodes.length>0)
+            break
+    }
+
+    //bottomLeft
+    for(let i=row-1,j=col-1 ; i>=1 && j>='a'.charCodeAt(0) ; i--,j--)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(j) + (i))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,bishopId,"bottomLeft")
+        }
+        else if($currentPosition.childNodes.length>0)
+            break
+    }
+
+    //bottomRight
+    for(let i=row-1,j=col+1 ; i>=1 && j<='h'.charCodeAt(0) ; i--,j++)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(j) + (i))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,bishopId,"bottomRight")
+        }
+        else if($currentPosition.childNodes.length>0)
+            break
+    }
+}
 //eventListener functions ---------------------
 
 function bishopCutPiece(eventDetails)
@@ -451,7 +507,12 @@ function bishopCutPiece(eventDetails)
     bishopRemovehighlightedAreas($sourceSquare,$targetSquare)
 
     //remove event listener at target
-    $targetSquare.removeEventListener("click" , bishopCutPiece )  
+    $targetSquare.removeEventListener("click" , bishopCutPiece ) 
+    
+    bishopCheckForKing($targetSquare,targetPositionId,bishopId)
+
+    let currentColor = (bishopId.slice(0,5)==="white") ? "black" : "white" 
+    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
 
     //to switch moves (black->white,white->black)
     if(bishopId.includes("black"))
@@ -488,6 +549,11 @@ function bishopMoveToTarget(eventDetails)
 
     //remove event listeners for highlighted areas and to cut opp piece                              ***
     bishopRemovehighlightedAreas($sourcePosition,$targetPosition)
+
+    bishopCheckForKing($targetPosition,$targetPosition.id,bishopId)
+
+    let currentColor = (bishopId.slice(0,5)==="white") ? "black" : "white" 
+    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
 
     //to switch moves (black->white,white->black)
     if(bishopId.includes("black"))
