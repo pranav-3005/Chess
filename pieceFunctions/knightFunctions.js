@@ -159,7 +159,10 @@ function knightPossibleSquaresToMoveAndCut(position,knightId)
             currentPositionId =  String.fromCharCode(col-2) + (row+1)
             $currentPosition = document.getElementById(currentPositionId)
 
-            knightMoves($currentPosition,currentColor,oppPieces,position,knightId)
+            if(isValidToMoveWhileCheck(currentPositionId,currentColor))
+            {
+                knightMoves($currentPosition,currentColor,oppPieces,position,knightId)
+            }
         }
 
         //topLeft21 [row+2][col-1]
@@ -168,7 +171,10 @@ function knightPossibleSquaresToMoveAndCut(position,knightId)
             currentPositionId =  String.fromCharCode(col-1) + (row+2)
             $currentPosition = document.getElementById(currentPositionId)
 
-            knightMoves($currentPosition,currentColor,oppPieces,position,knightId)
+            if(isValidToMoveWhileCheck(currentPositionId,currentColor))
+            {
+                knightMoves($currentPosition,currentColor,oppPieces,position,knightId)
+            }
         }
 
         //topRight12 [row+1][col+2]
@@ -177,7 +183,10 @@ function knightPossibleSquaresToMoveAndCut(position,knightId)
             currentPositionId =  String.fromCharCode(col+2) + (row+1)
             $currentPosition = document.getElementById(currentPositionId)
 
-            knightMoves($currentPosition,currentColor,oppPieces,position,knightId)
+            if(isValidToMoveWhileCheck(currentPositionId,currentColor))
+            {
+                knightMoves($currentPosition,currentColor,oppPieces,position,knightId)
+            }
         }
 
         //topRight21 [row+2][col+1]
@@ -186,7 +195,10 @@ function knightPossibleSquaresToMoveAndCut(position,knightId)
             currentPositionId =  String.fromCharCode(col+1) + (row+2)
             $currentPosition = document.getElementById(currentPositionId)
 
-            knightMoves($currentPosition,currentColor,oppPieces,position,knightId)
+            if(isValidToMoveWhileCheck(currentPositionId,currentColor))
+            {
+                knightMoves($currentPosition,currentColor,oppPieces,position,knightId)
+            }
         }
 
         //bottomLeft12 [row-1][col-2]
@@ -195,7 +207,10 @@ function knightPossibleSquaresToMoveAndCut(position,knightId)
             currentPositionId =  String.fromCharCode(col-2) + (row-1)
             $currentPosition = document.getElementById(currentPositionId)
 
-            knightMoves($currentPosition,currentColor,oppPieces,position,knightId)
+            if(isValidToMoveWhileCheck(currentPositionId,currentColor))
+            {
+                knightMoves($currentPosition,currentColor,oppPieces,position,knightId)
+            }
         }
 
         //bottomLeft21 [row-2][col-1]
@@ -204,7 +219,10 @@ function knightPossibleSquaresToMoveAndCut(position,knightId)
             currentPositionId =  String.fromCharCode(col-1) + (row-2)
             $currentPosition = document.getElementById(currentPositionId)
 
-            knightMoves($currentPosition,currentColor,oppPieces,position,knightId)
+            if(isValidToMoveWhileCheck(currentPositionId,currentColor))
+            {
+                knightMoves($currentPosition,currentColor,oppPieces,position,knightId)
+            }
         }
 
         //bottomRight12 [row-1][col+2]
@@ -213,7 +231,10 @@ function knightPossibleSquaresToMoveAndCut(position,knightId)
             currentPositionId =  String.fromCharCode(col+2) + (row-1)
             $currentPosition = document.getElementById(currentPositionId)
 
-            knightMoves($currentPosition,currentColor,oppPieces,position,knightId)
+            if(isValidToMoveWhileCheck(currentPositionId,currentColor))
+            {
+                knightMoves($currentPosition,currentColor,oppPieces,position,knightId)
+            }
         }
 
         //bottomRight21 [row-2][col+1]
@@ -222,7 +243,10 @@ function knightPossibleSquaresToMoveAndCut(position,knightId)
             currentPositionId =  String.fromCharCode(col+1) + (row-2)
             $currentPosition = document.getElementById(currentPositionId)
 
-            knightMoves($currentPosition,currentColor,oppPieces,position,knightId)
+            if(isValidToMoveWhileCheck(currentPositionId,currentColor))
+            {
+                knightMoves($currentPosition,currentColor,oppPieces,position,knightId)
+            }
         }
 }
 
@@ -422,6 +446,96 @@ function knightRemovehighlightedAreas($sourcePosition,$targetPosition)
     }
 }
 
+function knightCheckForKing($currentSquare,position,knightId)
+{
+    let col=position[0].charCodeAt(0)
+    let row= Number(position[1])
+    let currentColor= knightId.slice(0,5)
+
+    //checking all 4 diagonals to move or cut
+    let $currentPosition = ''
+
+    //topLeft12  [row+1][col-2]
+    if(col-2>='a'.charCodeAt(0) && row+1<=8)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(col-2) + (row+1))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,knightId,"topLeft")
+        }
+    }
+
+    //topLeft21 [row+2][col-1]
+    if(col-1>='a'.charCodeAt(0) && row+2<=8)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(col-1) + (row+2))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,knightId,"topLeft")
+        }
+    }
+
+    //topRight12 [row+1][col+2]
+    if(col+2<='h'.charCodeAt(0) && row+1<=8)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(col+2) + (row+1))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,knightId,"topRight")
+        }
+    }
+
+    //topRight21 [row+2][col+1]
+    if(col+1<='h'.charCodeAt(0) && row+2<=8)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(col+1) + (row+2))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,knightId,"topRight")
+        }
+    }
+
+    //bottomLeft12 [row-1][col-2]
+    if(col-2>='a'.charCodeAt(0) && row-1>=1)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(col-2) + (row-1))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,knightId,"bottommLeft")
+        }
+    }
+
+    //bottomLeft21 [row-2][col-1]
+    if(col-1>='a'.charCodeAt(0) && row-2>=1)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(col-1) + (row-2))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,knightId,"bottomLeft")
+        }
+    }
+
+    //bottomRight12 [row-1][col+2]
+    if(col+2<='h'.charCodeAt(0) && row-1>=1)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(col+2) + (row-1))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,knightId,"bottomRight")
+        }
+    }
+
+    //bottomRight21 [row-2][col+1]
+    if(col+1<='h'.charCodeAt(0) && row-2>=1)
+    {
+        $currentPosition = document.getElementById(String.fromCharCode(col+1) + (row-2))
+        if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
+        {
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,knightId,"bottomRight")
+        }
+    }
+}
+
 
 //eventListener functions -----------------------------
 
@@ -456,6 +570,11 @@ function knightCutPiece(eventDetails)
 
     //remove event listener at target
     $targetSquare.removeEventListener("click" , knightCutPiece )
+
+    knightCheckForKing($targetSquare,targetPositionId,knightId)
+
+    let currentColor = knightId.slice(0,5)
+    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
     
     //to switch moves (black->white,white->black)
     if(knightId.includes("black"))
@@ -493,6 +612,10 @@ function knightMoveToTarget(eventDetails) {
     //remove event listeners for highlighted areas and to cut opp piece                              ***
     knightRemovehighlightedAreas($sourcePosition,$targetPosition)
 
+    knightCheckForKing($targetPosition,$targetPosition.id,knightId)
+
+    let currentColor = knightId.slice(0,5)
+    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
 
     //to switch moves (black->white,white->black)
     if(knightId.includes("black"))

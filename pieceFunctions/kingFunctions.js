@@ -787,6 +787,8 @@ function kingCutPiece()
 
     //remove event listener at target
     $targetSquare.removeEventListener("click" , kingCutPiece )
+
+    chessPieces[kingId]["isUnderCheck"]=false
    
     //to switch moves (black->white,white->black)
     if(kingId.includes("black"))
@@ -823,6 +825,8 @@ function kingMoveToTarget()
 
     //remove event listeners for highlighted areas and to cut opp piece                              ***
     kingRemovehighlightedAreas($sourcePosition,$targetPosition)
+
+    chessPieces[kingId]["isUnderCheck"]=false
 
     //to switch moves (black->white,white->black)
     if(kingId.includes("black"))

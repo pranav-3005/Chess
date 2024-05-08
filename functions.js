@@ -132,7 +132,10 @@ function checkFunction(KingColor , kingPositionId, opponentPieceId ,direction)
     let kingCol = $kingSquare.id[0].charCodeAt(0)
 
     path.length=0
-    path = getPath(oppRow,oppCol,kingRow,kingCol,direction)
+    if($opponentPiece.id.includes("Knight"))
+        path = [$opponentPieceSquare.id]
+    else
+        path = getPath(oppRow,oppCol,kingRow,kingCol,direction)
 
     console.log("path : ",path)
     
@@ -143,7 +146,7 @@ function checkFunction(KingColor , kingPositionId, opponentPieceId ,direction)
     
 }
 
-function isValidToMoveWhileCheck(squareId,currentColor)
+function isValidToMoveWhileCheckForPawn(squareId,currentColor)
 {
     if(chessPieces[ currentColor+"King" ]["isUnderCheck"]===false || (path.length>1 && path.includes(squareId))  )
     {
@@ -152,6 +155,188 @@ function isValidToMoveWhileCheck(squareId,currentColor)
     }    
 
     return false
+}
+function isValidToCutWhileCheckForPawn(squareId,currentColor)
+{
+    if(chessPieces[ currentColor+"King" ]["isUnderCheck"]===false || (path.length>=1 && path[0]===squareId)  )
+    {
+        // chessPieces[ currentColor+"King" ]["isUnderCheck"]=false 
+        return true
+    }    
+
+    return false
+}
+function isValidToMoveWhileCheck(squareId,currentColor)
+{
+    //true, if either king's not in check or crnt movement SQ blocks the check path
+    if( chessPieces[ currentColor+"King" ]["isUnderCheck"]===false || (path.length>=1 && path.includes(squareId)) )
+    {
+        return true
+    }    
+
+    return false
+}
+
+function isPossibleCheckIfMoved(currentColor)
+{
+    // let possibleQueenId = ''
+    // let possibleRookIds =[]
+    // let possibleBishopIds =[]
+
+    let $currentKing= document.getElementById(currentColor+"King")
+    let currentPositionId = chessPieces[$currentKing.id]["$parentElement"].id
+    let row = Number(currentPositionId[1])
+    let col = currentPositionId[0].charCodeAt(0)
+
+    //check for rook and queen
+    //top
+    for(let i=row+1;i<=8;i++)
+    {
+        let $currentSquare = document.getElementById( String.fromCharCode(col) + i )
+
+        if( $currentSquare.childNodes.length>0)
+        {
+            if( !$currentSquare.childNodes[0].id.includes(currentColor) && ( $currentSquare.childNodes[0].id.includes("Queen") || $currentSquare.childNodes[0].id.includes("Rook") ) )
+            {
+                return true
+            }
+            else
+            {
+                break
+            }
+        }
+    }
+
+    //bottom
+    for(let i=row-1;i>=1;i--)
+    {
+        let $currentSquare = document.getElementById( String.fromCharCode(col) + i )
+
+        if( $currentSquare.childNodes.length>0)
+        {
+            if( !$currentSquare.childNodes[0].id.includes(currentColor) && ( $currentSquare.childNodes[0].id.includes("Queen") || $currentSquare.childNodes[0].id.includes("Rook") ) )
+            {
+                return true
+            }
+            else
+            {
+                break
+            }
+        }
+    }
+
+    //right
+    for(let i=col+1;i<='h'.charCodeAt(0);i++)  //a to z (97 - 122)
+    {
+        let $currentSquare = document.getElementById( String.fromCharCode(i) + row )
+
+        if( $currentSquare.childNodes.length>0)
+        {
+            if( !$currentSquare.childNodes[0].id.includes(currentColor) && ( $currentSquare.childNodes[0].id.includes("Queen") || $currentSquare.childNodes[0].id.includes("Rook") ) )
+            {
+                return true
+            }
+            else
+            {
+                break
+            }
+        }
+    }
+
+    //left
+    for(let i=col-1;i>='a'.charCodeAt(0);i--)  //a to z (97 - 122)
+    {
+        let $currentSquare = document.getElementById( String.fromCharCode(i) + row )
+
+        if( $currentSquare.childNodes.length>0)
+        {
+            if( !$currentSquare.childNodes[0].id.includes(currentColor) && ( $currentSquare.childNodes[0].id.includes("Queen") || $currentSquare.childNodes[0].id.includes("Rook") ) )
+            {
+                return true
+            }
+            else
+            {
+                break
+            }
+        }
+    }
+
+
+    //check for queen and bishop
+    //top-left diagonal
+    for(let i=row+1,j=col-1;i<=8 && j>=97; i++,j--)
+    {
+        let $currentSquare = document.getElementById( String.fromCharCode(j) + i )
+
+        if( $currentSquare.childNodes.length>0)
+        {
+            if( !$currentSquare.childNodes[0].id.includes(currentColor) && ( $currentSquare.childNodes[0].id.includes("Queen") || $currentSquare.childNodes[0].id.includes("Bishop") ) )
+            {
+                return true
+            }
+            else
+            {
+                break
+            }
+        }
+    }
+
+    //topRight
+    for(let i=row+1,j=col+1 ; i<=8 && j<='h'.charCodeAt(0) ; i++,j++)
+    {
+        let $currentSquare = document.getElementById( String.fromCharCode(j) + i )
+
+        if( $currentSquare.childNodes.length>0)
+        {
+            if( !$currentSquare.childNodes[0].id.includes(currentColor) && ( $currentSquare.childNodes[0].id.includes("Queen") || $currentSquare.childNodes[0].id.includes("Bishop") ) )
+            {
+                return true
+            }
+            else
+            {
+                break
+            }
+        }
+    }
+
+    //bottomLeft
+    for(let i=row-1,j=col-1 ; i>=1 && j>='a'.charCodeAt(0) ; i--,j--)
+    {
+        let $currentSquare = document.getElementById( String.fromCharCode(j) + i )
+
+        if( $currentSquare.childNodes.length>0)
+        {
+            if( !$currentSquare.childNodes[0].id.includes(currentColor) && ( $currentSquare.childNodes[0].id.includes("Queen") || $currentSquare.childNodes[0].id.includes("Bishop") ) )
+            {
+                return true
+            }
+            else
+            {
+                break
+            }
+        }
+    }
+
+    //bottomRight
+    for(let i=row-1,j=col+1 ; i>=1 && j<='h'.charCodeAt(0) ; i--,j++)
+    {
+        let $currentSquare = document.getElementById( String.fromCharCode(j) + i )
+
+        if( $currentSquare.childNodes.length>0)
+        {
+            if( !$currentSquare.childNodes[0].id.includes(currentColor) && ( $currentSquare.childNodes[0].id.includes("Queen") || $currentSquare.childNodes[0].id.includes("Bishop") ) )
+            {
+                return true
+            }
+            else
+            {
+                break
+            }
+        }
+    }
+
+    return false
+
 }
 //need ot do changes for knight
 // function checkForBlocks(path,KingColor)

@@ -104,13 +104,19 @@ function queenPossibleSquaresToMoveAndCut(position,queenId)
         currentPositionId = String.fromCharCode(col) + i
         $currentPosition = document.getElementById(currentPositionId)
 
-        if($currentPosition.childNodes.length>0)
+        if($currentPosition.childNodes.length>0 && $currentPosition.childNodes[0].id.includes(currentColor))
+            break
+
+        if(isValidToMoveWhileCheck(currentPositionId,currentColor))
         {
-            queenHighlightMovesToCut($currentPosition,currentColor,oppPieces,position,queenId)
-            break       //if found an piece,lock the movements,till now
+            if($currentPosition.childNodes.length>0)
+            {
+                queenHighlightMovesToCut($currentPosition,currentColor,oppPieces,position,queenId)
+                break       //if found an piece,lock the movements,till now
+            }
+            //highlight next moves && click event to move to the target
+            queenHightlightMovesToMove($currentPosition,position,queenId)               //move
         }
-        //highlight next moves && click event to move to the target
-        queenHightlightMovesToMove($currentPosition,position,queenId)               //move
     }
 
     //top right
@@ -119,13 +125,19 @@ function queenPossibleSquaresToMoveAndCut(position,queenId)
         currentPositionId = String.fromCharCode(j) + i
         $currentPosition = document.getElementById(currentPositionId)
 
-        if($currentPosition.childNodes.length>0)
+        if($currentPosition.childNodes.length>0 && $currentPosition.childNodes[0].id.includes(currentColor))
+            break
+
+        if(isValidToMoveWhileCheck(currentPositionId,currentColor))
         {
-            queenHighlightMovesToCut($currentPosition,currentColor,oppPieces,position,queenId)
-            break       //if found an piece,lock the movements,till now
+            if($currentPosition.childNodes.length>0)
+            {
+                queenHighlightMovesToCut($currentPosition,currentColor,oppPieces,position,queenId)
+                break       //if found an piece,lock the movements,till now
+            }
+            //highlight next moves && click event to move to the target
+            queenHightlightMovesToMove($currentPosition,position,queenId)               //move
         }
-        //highlight next moves && click event to move to the target
-        queenHightlightMovesToMove($currentPosition,position,queenId)               //move
     }
 
     //right
@@ -134,13 +146,19 @@ function queenPossibleSquaresToMoveAndCut(position,queenId)
         currentPositionId = String.fromCharCode(j) + row
         $currentPosition = document.getElementById(currentPositionId)
 
-        if($currentPosition.childNodes.length>0)
+        if($currentPosition.childNodes.length>0 && $currentPosition.childNodes[0].id.includes(currentColor))
+            break
+
+        if(isValidToMoveWhileCheck(currentPositionId,currentColor))
         {
-            queenHighlightMovesToCut($currentPosition,currentColor,oppPieces,position,queenId)
-            break       //if found an piece,lock the movements,till now
+            if($currentPosition.childNodes.length>0)
+            {
+                queenHighlightMovesToCut($currentPosition,currentColor,oppPieces,position,queenId)
+                break       //if found an piece,lock the movements,till now
+            }
+            //highlight next moves && click event to move to the target
+            queenHightlightMovesToMove($currentPosition,position,queenId)               //move
         }
-        //highlight next moves && click event to move to the target
-        queenHightlightMovesToMove($currentPosition,position,queenId)               //move
     }
 
     //bottom right
@@ -149,13 +167,19 @@ function queenPossibleSquaresToMoveAndCut(position,queenId)
         currentPositionId = String.fromCharCode(j) + i
         $currentPosition = document.getElementById(currentPositionId)
 
-        if($currentPosition.childNodes.length>0)
+        if($currentPosition.childNodes.length>0 && $currentPosition.childNodes[0].id.includes(currentColor))
+            break
+
+        if(isValidToMoveWhileCheck(currentPositionId,currentColor))
         {
-            queenHighlightMovesToCut($currentPosition,currentColor,oppPieces,position,queenId)
-            break       //if found an piece,lock the movements,till now
+            if($currentPosition.childNodes.length>0)
+            {
+                queenHighlightMovesToCut($currentPosition,currentColor,oppPieces,position,queenId)
+                break       //if found an piece,lock the movements,till now
+            }
+            //highlight next moves && click event to move to the target
+            queenHightlightMovesToMove($currentPosition,position,queenId)               //move
         }
-        //highlight next moves && click event to move to the target
-        queenHightlightMovesToMove($currentPosition,position,queenId)               //move
     }
 
     //bottom
@@ -164,13 +188,19 @@ function queenPossibleSquaresToMoveAndCut(position,queenId)
         currentPositionId = String.fromCharCode(col) + i
         $currentPosition = document.getElementById(currentPositionId)
 
-        if($currentPosition.childNodes.length>0)
+        if($currentPosition.childNodes.length>0 && $currentPosition.childNodes[0].id.includes(currentColor))
+            break
+
+        if(isValidToMoveWhileCheck(currentPositionId,currentColor))
         {
-            queenHighlightMovesToCut($currentPosition,currentColor,oppPieces,position,queenId)
-            break       //if found an piece,lock the movements,till now
+            if($currentPosition.childNodes.length>0)
+            {
+                queenHighlightMovesToCut($currentPosition,currentColor,oppPieces,position,queenId)
+                break       //if found an piece,lock the movements,till now
+            }
+            //highlight next moves && click event to move to the target
+            queenHightlightMovesToMove($currentPosition,position,queenId)               //move
         }
-        //highlight next moves && click event to move to the target
-        queenHightlightMovesToMove($currentPosition,position,queenId)               //move
     }
 
     //bottom left
@@ -179,13 +209,19 @@ function queenPossibleSquaresToMoveAndCut(position,queenId)
         currentPositionId = String.fromCharCode(j) + i
         $currentPosition = document.getElementById(currentPositionId)
 
-        if($currentPosition.childNodes.length>0)
+        if($currentPosition.childNodes.length>0 && $currentPosition.childNodes[0].id.includes(currentColor))
+            break
+
+        if(isValidToMoveWhileCheck(currentPositionId,currentColor))
         {
-            queenHighlightMovesToCut($currentPosition,currentColor,oppPieces,position,queenId)
-            break       //if found an piece,lock the movements,till now
+            if($currentPosition.childNodes.length>0)
+            {
+                queenHighlightMovesToCut($currentPosition,currentColor,oppPieces,position,queenId)
+                break       //if found an piece,lock the movements,till now
+            }
+            //highlight next moves && click event to move to the target
+            queenHightlightMovesToMove($currentPosition,position,queenId)               //move
         }
-        //highlight next moves && click event to move to the target
-        queenHightlightMovesToMove($currentPosition,position,queenId)               //move
     }
 
     //left
@@ -194,13 +230,19 @@ function queenPossibleSquaresToMoveAndCut(position,queenId)
         currentPositionId = String.fromCharCode(j) + row
         $currentPosition = document.getElementById(currentPositionId)
 
-        if($currentPosition.childNodes.length>0)
+        if($currentPosition.childNodes.length>0 && $currentPosition.childNodes[0].id.includes(currentColor))
+            break
+
+        if(isValidToMoveWhileCheck(currentPositionId,currentColor))
         {
-            queenHighlightMovesToCut($currentPosition,currentColor,oppPieces,position,queenId)
-            break       //if found an piece,lock the movements,till now
+            if($currentPosition.childNodes.length>0)
+            {
+                queenHighlightMovesToCut($currentPosition,currentColor,oppPieces,position,queenId)
+                break       //if found an piece,lock the movements,till now
+            }
+            //highlight next moves && click event to move to the target
+            queenHightlightMovesToMove($currentPosition,position,queenId)               //move
         }
-        //highlight next moves && click event to move to the target
-        queenHightlightMovesToMove($currentPosition,position,queenId)               //move
     }
 
     //top left
@@ -209,13 +251,19 @@ function queenPossibleSquaresToMoveAndCut(position,queenId)
         currentPositionId = String.fromCharCode(j) + i
         $currentPosition = document.getElementById(currentPositionId)
 
-        if($currentPosition.childNodes.length>0)
+        if($currentPosition.childNodes.length>0 && $currentPosition.childNodes[0].id.includes(currentColor))
+            break
+
+        if(isValidToMoveWhileCheck(currentPositionId,currentColor))
         {
-            queenHighlightMovesToCut($currentPosition,currentColor,oppPieces,position,queenId)
-            break       //if found an piece,lock the movements,till now
+            if($currentPosition.childNodes.length>0)
+            {
+                queenHighlightMovesToCut($currentPosition,currentColor,oppPieces,position,queenId)
+                break       //if found an piece,lock the movements,till now
+            }
+            //highlight next moves && click event to move to the target
+            queenHightlightMovesToMove($currentPosition,position,queenId)               //move
         }
-        //highlight next moves && click event to move to the target
-        queenHightlightMovesToMove($currentPosition,position,queenId)               //move
     }
 }
 
@@ -583,17 +631,24 @@ function queenCutPiece()
     let $sourceSquare = document.getElementById(sourcePositionId)
     let $targetSquare = document.getElementById(targetPositionId)
     let queenId = $sourceSquare.childNodes[0].id
+    let currentColor = queenId.slice(0,5)
+
+    let $targetPiece = $targetSquare.childNodes[0]
+    let $sourcePiece = $sourceSquare.childNodes[0]
 
     let col=sourcePositionId[0].charCodeAt(0)
     let row= Number(sourcePositionId[1])
 
     //update at obj
     let destinationTempColor= chessPieces[ $targetSquare.childNodes[0].id ]["parentColor"]
+    let sourceTempColor= chessPieces[ $sourceSquare.childNodes[0].id ]["parentColor"]
+
     chessPieces[$targetSquare.childNodes[0].id]["$parentElement"]=''
     chessPieces[$targetSquare.childNodes[0].id]["parentColor"]=''
 
     chessPieces[queenId]["$parentElement"]= $targetSquare
     chessPieces[queenId]["parentColor"] = destinationTempColor
+
 
     //update at HTML element
     $targetSquare.style.backgroundColor = destinationTempColor
@@ -608,16 +663,37 @@ function queenCutPiece()
     //remove event listener at target
     $targetSquare.removeEventListener("click" , queenCutPiece )  
 
-    queenCheckForKing($targetSquare , targetPositionId , queenId)
-
-    let currentColor = (queenId.slice(0,5)==="white") ? "black" : "white" 
-    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
-
-    //to switch moves (black->white,white->black)
-    if(queenId.includes("black"))
-        currentPlayerColor="white"
+    if(isPossibleCheckIfMoved(currentColor))
+    {
+         //update at obj
+         chessPieces[$targetPiece.id]["$parentElement"]= $targetSquare
+         chessPieces[$targetPiece.id]["parentColor"]=destinationTempColor
+ 
+         chessPieces[queenId]["$parentElement"]= $sourceSquare
+         chessPieces[queenId]["parentColor"] = sourceTempColor
+ 
+         //update at HTML element
+         $targetSquare.innerHTML=''
+         $targetSquare.append($targetPiece)
+ 
+         $sourceSquare.append($sourcePiece)
+ 
+         alert("Warning !!! , a check can be possible")
+ 
+    }
     else
-        currentPlayerColor="black"
+    {
+        queenCheckForKing($targetSquare , targetPositionId , queenId)
+
+        chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
+    
+        //to switch moves (black->white,white->black)
+        if(queenId.includes("black"))
+            currentPlayerColor="white"
+        else
+            currentPlayerColor="black"
+    }
+    
 }
 
 function queenMoveToTarget()
@@ -626,6 +702,7 @@ function queenMoveToTarget()
     let $currentQueen = document.getElementById(this.queenId)
     let queenId=this.queenId
     let $targetPosition = document.getElementById(this.id)
+    let currentColor = queenId.slice(0,5)
 
     //remove highlight on source position
     chessPieces[queenId]["$parentElement"].removeEventListener("mouseover",mouseover)
@@ -635,7 +712,7 @@ function queenMoveToTarget()
     $targetPosition.addEventListener("mouseover",mouseover)
     $targetPosition.addEventListener("mouseout",mouseout)
 
-    //move bishop , src->target
+    //move queen , src->target
     $sourcePosition.innerHTML=''
     $targetPosition.append($currentQueen)
 
@@ -649,14 +726,38 @@ function queenMoveToTarget()
     //remove event listeners for highlighted areas and to cut opp piece                              ***
     queenRemovehighlightedAreas($sourcePosition,$targetPosition)
 
-    queenCheckForKing($targetPosition , targetPositionId , queenId)
+    if(isPossibleCheckIfMoved(currentColor))
+    {
+        //update in chessPieces obj
+        chessPieces[queenId]["$parentElement"]=$sourcePosition
+        chessPieces[queenId]["parentColor"]=$sourcePosition.style.backgroundColor
 
-    let currentColor = (queenId.slice(0,5)==="white") ? "black" : "white" 
-    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
+        //move queen , target->src
+        $targetPosition.innerHTML=''
+        $sourcePosition.append($currentQueen)
 
-    //to switch moves (black->white,white->black)
-    if(queenId.includes("black"))
-        currentPlayerColor="white"
+        //highlight source
+        $sourcePosition.addEventListener("mouseover",mouseover)
+        $sourcePosition.addEventListener("mouseout",mouseout)
+
+        //remove highlight on target position
+        $targetPosition.removeEventListener("mouseover",mouseover)
+        $targetPosition.removeEventListener("mouseout",mouseout)
+
+        alert("Warning !!! , a check can be possible")
+ 
+    }
     else
-        currentPlayerColor="black"
+    {
+        queenCheckForKing($targetPosition , $targetPosition.id , queenId)
+    
+        chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
+
+        //to switch moves (black->white,white->black)
+        if(queenId.includes("black"))
+            currentPlayerColor="white"
+        else
+            currentPlayerColor="black"
+    }
+    
 }

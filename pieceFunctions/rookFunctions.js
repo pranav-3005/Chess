@@ -162,33 +162,39 @@ function rookCheckPossibleSquaresToMoveAndCut(position,rookId)
             let currentPositionId = position[0]+i
             let $currentPosition = document.getElementById(currentPositionId)
 
-            if($currentPosition.childNodes.length>0)
-            {
-                if(!$currentPosition.childNodes[0].id.includes(currentColor))
-                {
-                    oppPieces.push($currentPosition.childNodes[0].id)
-                    
-                    if($currentPosition.style.backgroundColor==="grey")
-                    {
-                        $currentPosition.style.backgroundColor=  chessPieces[$currentPosition.childNodes[0].id]["parentColor"]
-                        $currentPosition.removeEventListener("click" , rookCutPiece ) 
-                    }
-                    else 
-                    {
-                        $currentPosition.style.backgroundColor="grey"
-                        
-                        //2.click event to cut opp piece
-                        $currentPosition.sourcePositionId=position
-                        $currentPosition.rookId=rookId
-                        $currentPosition.addEventListener("click" , rookCutPiece )                   // ********** 
-                    }
-
-                    
-                }
+            if($currentPosition.childNodes.length>0 && $currentPosition.childNodes[0].id.includes(currentColor))
                 break
+
+            if(isValidToMoveWhileCheck(currentPositionId,currentColor))
+            {
+                if($currentPosition.childNodes.length>0)
+                {
+                    if(!$currentPosition.childNodes[0].id.includes(currentColor))
+                    {
+                        oppPieces.push($currentPosition.childNodes[0].id)
+                        
+                        if($currentPosition.style.backgroundColor==="grey")
+                        {
+                            $currentPosition.style.backgroundColor=  chessPieces[$currentPosition.childNodes[0].id]["parentColor"]
+                            $currentPosition.removeEventListener("click" , rookCutPiece ) 
+                        }
+                        else 
+                        {
+                            $currentPosition.style.backgroundColor="grey"
+                            
+                            //2.click event to cut opp piece
+                            $currentPosition.sourcePositionId=position
+                            $currentPosition.rookId=rookId
+                            $currentPosition.addEventListener("click" , rookCutPiece )                   // ********** 
+                        }
+
+                        
+                    }
+                    break
+                }
+                //1.highlight next moves && click event to move to the target
+                rookHightLightMoves($currentPosition,position,rookId)
             }
-            //1.highlight next moves && click event to move to the target
-            rookHightLightMoves($currentPosition,position,rookId)
         }
 
         //right
@@ -197,32 +203,39 @@ function rookCheckPossibleSquaresToMoveAndCut(position,rookId)
             let currentPositionId = String.fromCharCode(j)+row
             let $currentPosition = document.getElementById(currentPositionId)
 
-            if($currentPosition.childNodes.length>0)
-            {
-                if(!$currentPosition.childNodes[0].id.includes(currentColor))
-                {
-                    oppPieces.push($currentPosition.childNodes[0].id)
-                    
-                    if($currentPosition.style.backgroundColor==="grey")
-                    {
-                        $currentPosition.style.backgroundColor=  chessPieces[$currentPosition.childNodes[0].id]["parentColor"]
-                        $currentPosition.removeEventListener("click" , rookCutPiece ) 
-                    }
-                    else
-                    {
-                        $currentPosition.style.backgroundColor="grey"
-
-                        //2.click event to cut opp piece
-                        $currentPosition.sourcePositionId=position
-                        $currentPosition.rookId=rookId
-                        $currentPosition.addEventListener("click" , rookCutPiece )                   // ********** 
-                    }
-                }
+            if($currentPosition.childNodes.length>0 && $currentPosition.childNodes[0].id.includes(currentColor))
                 break
-            }
 
-            //highlight next moves && click event to move to the target
-            rookHightLightMoves($currentPosition,position,rookId)
+            if(isValidToMoveWhileCheck(currentPositionId,currentColor))
+            {
+                if($currentPosition.childNodes.length>0)
+                {
+                    if(!$currentPosition.childNodes[0].id.includes(currentColor))
+                    {
+                        oppPieces.push($currentPosition.childNodes[0].id)
+                        
+                        if($currentPosition.style.backgroundColor==="grey")
+                        {
+                            $currentPosition.style.backgroundColor=  chessPieces[$currentPosition.childNodes[0].id]["parentColor"]
+                            $currentPosition.removeEventListener("click" , rookCutPiece ) 
+                        }
+                        else 
+                        {
+                            $currentPosition.style.backgroundColor="grey"
+                            
+                            //2.click event to cut opp piece
+                            $currentPosition.sourcePositionId=position
+                            $currentPosition.rookId=rookId
+                            $currentPosition.addEventListener("click" , rookCutPiece )                   // ********** 
+                        }
+
+                        
+                    }
+                    break
+                }
+                //1.highlight next moves && click event to move to the target
+                rookHightLightMoves($currentPosition,position,rookId)
+            }
         }
 
         //down
@@ -231,32 +244,39 @@ function rookCheckPossibleSquaresToMoveAndCut(position,rookId)
             let currentPositionId = position[0]+i
             let $currentPosition = document.getElementById(currentPositionId)
 
-            if( $currentPosition.childNodes.length>0 )
-            {
-                if(!$currentPosition.childNodes[0].id.includes(currentColor))
-                {
-                    oppPieces.push($currentPosition.childNodes[0].id)
-                    
-                    if($currentPosition.style.backgroundColor==="grey")
-                    {
-                        $currentPosition.style.backgroundColor=  chessPieces[$currentPosition.childNodes[0].id]["parentColor"]
-                        $currentPosition.removeEventListener("click" , rookCutPiece ) 
-                    }
-                    else
-                    {
-                        $currentPosition.style.backgroundColor="grey"
-
-                        //2.click event to cut opp piece
-                        $currentPosition.sourcePositionId=position
-                        $currentPosition.rookId=rookId
-                        $currentPosition.addEventListener("click" , rookCutPiece )                   // ********** 
-                    }
-                }
+            if($currentPosition.childNodes.length>0 && $currentPosition.childNodes[0].id.includes(currentColor))
                 break
-            }
 
-            //highlight next moves && click event to move to the target
-            rookHightLightMoves($currentPosition,position,rookId)
+            if(isValidToMoveWhileCheck(currentPositionId,currentColor))
+            {
+                if($currentPosition.childNodes.length>0)
+                {
+                    if(!$currentPosition.childNodes[0].id.includes(currentColor))
+                    {
+                        oppPieces.push($currentPosition.childNodes[0].id)
+                        
+                        if($currentPosition.style.backgroundColor==="grey")
+                        {
+                            $currentPosition.style.backgroundColor=  chessPieces[$currentPosition.childNodes[0].id]["parentColor"]
+                            $currentPosition.removeEventListener("click" , rookCutPiece ) 
+                        }
+                        else 
+                        {
+                            $currentPosition.style.backgroundColor="grey"
+                            
+                            //2.click event to cut opp piece
+                            $currentPosition.sourcePositionId=position
+                            $currentPosition.rookId=rookId
+                            $currentPosition.addEventListener("click" , rookCutPiece )                   // ********** 
+                        }
+
+                        
+                    }
+                    break
+                }
+                //1.highlight next moves && click event to move to the target
+                rookHightLightMoves($currentPosition,position,rookId)
+            }
         }
 
         //left
@@ -265,32 +285,39 @@ function rookCheckPossibleSquaresToMoveAndCut(position,rookId)
             let currentPositionId = String.fromCharCode(j)+row
             let $currentPosition = document.getElementById(currentPositionId)
             
-            if($currentPosition.childNodes.length>0)
-            {
-                if(!$currentPosition.childNodes[0].id.includes(currentColor))
-                {
-                    oppPieces.push($currentPosition.childNodes[0].id)
-                    
-                    if($currentPosition.style.backgroundColor==="grey")
-                    {
-                        $currentPosition.style.backgroundColor=  chessPieces[$currentPosition.childNodes[0].id]["parentColor"]
-                        $currentPosition.removeEventListener("click" , rookCutPiece ) 
-                    }
-                    else
-                    {
-                        $currentPosition.style.backgroundColor="grey"
-
-                        //2.click event to cut opp piece
-                        $currentPosition.sourcePositionId=position
-                        $currentPosition.rookId=rookId
-                        $currentPosition.addEventListener("click" , rookCutPiece )                   // ********** 
-                    }
-                }
+            if($currentPosition.childNodes.length>0 && $currentPosition.childNodes[0].id.includes(currentColor))
                 break
-            }
 
-            //highlight next moves && click event to move to the target
-            rookHightLightMoves($currentPosition,position,rookId)
+            if(isValidToMoveWhileCheck(currentPositionId,currentColor))
+            {
+                if($currentPosition.childNodes.length>0)
+                {
+                    if(!$currentPosition.childNodes[0].id.includes(currentColor))
+                    {
+                        oppPieces.push($currentPosition.childNodes[0].id)
+                        
+                        if($currentPosition.style.backgroundColor==="grey")
+                        {
+                            $currentPosition.style.backgroundColor=  chessPieces[$currentPosition.childNodes[0].id]["parentColor"]
+                            $currentPosition.removeEventListener("click" , rookCutPiece ) 
+                        }
+                        else 
+                        {
+                            $currentPosition.style.backgroundColor="grey"
+                            
+                            //2.click event to cut opp piece
+                            $currentPosition.sourcePositionId=position
+                            $currentPosition.rookId=rookId
+                            $currentPosition.addEventListener("click" , rookCutPiece )                   // ********** 
+                        }
+
+                        
+                    }
+                    break
+                }
+                //1.highlight next moves && click event to move to the target
+                rookHightLightMoves($currentPosition,position,rookId)
+            }
         }
 
     // console.log(oppPieces)
@@ -462,13 +489,13 @@ function rookCheckForKing($currentSquare,position,rookId)
             break
     }
 
-    //down
+    //bottom
     for(let i=row-1;i>=1;i--)
     {
         $currentPosition = document.getElementById(String.fromCharCode(col) + (i))
         if( $currentPosition.childNodes.length>0 && !($currentPosition.childNodes[0].id.includes(currentColor)) && $currentPosition.childNodes[0].id.includes("King"))
         {
-            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,rookId,"down")
+            checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,rookId,"bottom")
         }
         else if($currentPosition.childNodes.length>0)
             break
@@ -495,6 +522,7 @@ function rookMoveToTarget(eventDetails)
     let $currentRook = document.getElementById(this.rookId)
     let rookId=this.rookId
     let $targetPosition = document.getElementById(this.id)
+    let currentColor = rookId.slice(0,5)
 
     //remove highlight on source position
     chessPieces[rookId]["$parentElement"].removeEventListener("mouseover",mouseover)
@@ -518,16 +546,39 @@ function rookMoveToTarget(eventDetails)
     //remove event listeners for highlighted areas and to cut opp piece                              ***
     rookRemovehighlightedAreas($sourcePosition,$targetPosition)
 
-    rookCheckForKing($targetPosition , $targetPosition.id , rookId)
+    if(isPossibleCheckIfMoved(currentColor))
+    {
+        //update in chessPieces obj
+        chessPieces[rookId]["$parentElement"]=$sourcePosition
+        chessPieces[rookId]["parentColor"]=$sourcePosition.style.backgroundColor
 
-    let currentColor = (rookId.slice(0,5)==="white") ? "black" : "white" 
-    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
+        //move bishop , target->src
+        $targetPosition.innerHTML=''
+        $sourcePosition.append($currentRook)
 
-    //to switch moves (black->white,white->black)
-    if(rookId.includes("black"))
-        currentPlayerColor="white"
+        //highlight source
+        $sourcePosition.addEventListener("mouseover",mouseover)
+        $sourcePosition.addEventListener("mouseout",mouseout)
+
+        //remove highlight on target position
+        $targetPosition.removeEventListener("mouseover",mouseover)
+        $targetPosition.removeEventListener("mouseout",mouseout)
+
+        alert("Warning !!! , a check can be possible")
+ 
+    }
     else
-        currentPlayerColor="black"
+    {
+        rookCheckForKing($targetPosition , $targetPosition.id , rookId)
+    
+        chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
+    
+        //to switch moves (black->white,white->black)
+        if(rookId.includes("black"))
+            currentPlayerColor="white"
+        else
+            currentPlayerColor="black"
+    }
 }
 //4.2
 function rookCutPiece(eventDetails)   
@@ -537,17 +588,23 @@ function rookCutPiece(eventDetails)
     let $sourceSquare = document.getElementById(sourcePositionId)
     let $targetSquare = document.getElementById(targetPositionId)
     let rookId = $sourceSquare.childNodes[0].id
+    let $currentRook = $sourceSquare.childNodes[0]
+    let $targetPiece = $targetSquare.childNodes[0]
+    let currentColor = rookId.slice(0,5)
 
     let col=sourcePositionId[0].charCodeAt(0)
     let row= Number(sourcePositionId[1])
 
     //update at obj
     let destinationTempColor= chessPieces[ $targetSquare.childNodes[0].id ]["parentColor"]
+    let sourceTempColor= chessPieces[ $sourceSquare.childNodes[0].id ]["parentColor"]
+
     chessPieces[$targetSquare.childNodes[0].id]["$parentElement"]=''
     chessPieces[$targetSquare.childNodes[0].id]["parentColor"]=''
 
     chessPieces[rookId]["$parentElement"]= $targetSquare
     chessPieces[rookId]["parentColor"] = destinationTempColor
+
 
     //update at HTML element
     $targetSquare.style.backgroundColor = destinationTempColor
@@ -562,15 +619,35 @@ function rookCutPiece(eventDetails)
     //remove event listener at target
     $targetSquare.removeEventListener("click" , rookCutPiece ) 
     
-    rookCheckForKing($targetSquare , targetPositionId , rookId)
+    if(isPossibleCheckIfMoved(currentColor))
+    {
+        //update at obj
+        chessPieces[$targetPiece.id]["$parentElement"]= $targetSquare
+        chessPieces[$targetPiece.id]["parentColor"]=destinationTempColor
 
-    let currentColor = (rookId.slice(0,5)==="white") ? "black" : "white" 
-    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
+        chessPieces[rookId]["$parentElement"]= $sourceSquare
+        chessPieces[rookId]["parentColor"] = sourceTempColor
 
-    //to switch moves (black->white,white->black)
-    if(rookId.includes("black"))
-        currentPlayerColor="white"
+        //update at HTML element
+        $targetSquare.innerHTML=''
+        $targetSquare.append($targetPiece)
+
+        $sourceSquare.append($currentRook)
+
+        alert("Warning !!! , a check can be possible")
+ 
+    }
     else
-        currentPlayerColor="black"
+    {
+        rookCheckForKing($targetSquare , targetPositionId , rookId)
+    
+        chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
+    
+        //to switch moves (black->white,white->black)
+        if(rookId.includes("black"))
+            currentPlayerColor="white"
+        else
+            currentPlayerColor="black"
+    }
     
 }

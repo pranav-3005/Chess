@@ -156,31 +156,38 @@ function bishopPossibleSquaresToMoveAndCut(position,bishopId)
         currentPositionId = String.fromCharCode(j) + i
         $currentPosition = document.getElementById(currentPositionId)
 
-        if($currentPosition.childNodes.length>0)
+        if($currentPosition.childNodes.length>0 && $currentPosition.childNodes[0].id.includes(currentColor))
+            break
+
+        if(isValidToMoveWhileCheck(currentPositionId,currentColor))
         {
-            if(!$currentPosition.childNodes[0].id.includes(currentColor))       //cut
+            if($currentPosition.childNodes.length>0)
             {
-                oppPieces.push($currentPosition.childNodes[0].id)
-                
-                if($currentPosition.style.backgroundColor==="grey")
+                if(!$currentPosition.childNodes[0].id.includes(currentColor) && !$currentPosition.childNodes[0].id.includes("King"))       //cut
                 {
-                    $currentPosition.style.backgroundColor=  chessPieces[$currentPosition.childNodes[0].id]["parentColor"]
-                    $currentPosition.removeEventListener("click" , bishopCutPiece ) 
-                }
-                else 
-                {
-                    $currentPosition.style.backgroundColor="grey"
+                    oppPieces.push($currentPosition.childNodes[0].id)
                     
-                    //2.click event to cut opp piece
-                    $currentPosition.sourcePositionId=position
-                    $currentPosition.bishopId=bishopId
-                    $currentPosition.addEventListener("click" , bishopCutPiece )                   // ********** 
-                }  
+                    if($currentPosition.style.backgroundColor==="grey")
+                    {
+                        $currentPosition.style.backgroundColor=  chessPieces[$currentPosition.childNodes[0].id]["parentColor"]
+                        $currentPosition.removeEventListener("click" , bishopCutPiece ) 
+                    }
+                    else 
+                    {
+                        $currentPosition.style.backgroundColor="grey"
+                        
+                        //2.click event to cut opp piece
+                        $currentPosition.sourcePositionId=position
+                        $currentPosition.bishopId=bishopId
+                        $currentPosition.addEventListener("click" , bishopCutPiece )                   // ********** 
+                    }  
+                }
+                break       //if found an piece,lock the movements,till now
             }
-            break       //if found an piece,lock the movements,till now
-        }
         //highlight next moves && click event to move to the target
         bishopHightLightMoves($currentPosition,position,bishopId)               //move
+        }
+     
     }
 
     //topRight
@@ -189,31 +196,37 @@ function bishopPossibleSquaresToMoveAndCut(position,bishopId)
         currentPositionId = String.fromCharCode(j) + i
         $currentPosition = document.getElementById(currentPositionId)
 
-        if($currentPosition.childNodes.length>0)
+        if($currentPosition.childNodes.length>0 && $currentPosition.childNodes[0].id.includes(currentColor))
+            break
+
+        if(isValidToMoveWhileCheck(currentPositionId,currentColor))
         {
-            if(!$currentPosition.childNodes[0].id.includes(currentColor))       //cut
+            if($currentPosition.childNodes.length>0)
             {
-                oppPieces.push($currentPosition.childNodes[0].id)
-                
-                if($currentPosition.style.backgroundColor==="grey")
+                if(!$currentPosition.childNodes[0].id.includes(currentColor) && !$currentPosition.childNodes[0].id.includes("King"))       //cut
                 {
-                    $currentPosition.style.backgroundColor=  chessPieces[$currentPosition.childNodes[0].id]["parentColor"]
-                    $currentPosition.removeEventListener("click" , bishopCutPiece ) 
-                }
-                else 
-                {
-                    $currentPosition.style.backgroundColor="grey"
+                    oppPieces.push($currentPosition.childNodes[0].id)
                     
-                    //2.click event to cut opp piece
-                    $currentPosition.sourcePositionId=position
-                    $currentPosition.bishopId=bishopId
-                    $currentPosition.addEventListener("click" , bishopCutPiece )                   // ********** 
-                }  
+                    if($currentPosition.style.backgroundColor==="grey")
+                    {
+                        $currentPosition.style.backgroundColor=  chessPieces[$currentPosition.childNodes[0].id]["parentColor"]
+                        $currentPosition.removeEventListener("click" , bishopCutPiece ) 
+                    }
+                    else 
+                    {
+                        $currentPosition.style.backgroundColor="grey"
+                        
+                        //2.click event to cut opp piece
+                        $currentPosition.sourcePositionId=position
+                        $currentPosition.bishopId=bishopId
+                        $currentPosition.addEventListener("click" , bishopCutPiece )                   // ********** 
+                    }  
+                }
+                break       //if found an piece,lock the movements,till now
             }
-            break       //if found an piece,lock the movements,till now
-        }
         //highlight next moves && click event to move to the target
-        bishopHightLightMoves($currentPosition,position,bishopId)           //move
+        bishopHightLightMoves($currentPosition,position,bishopId)               //move
+        }
     }
 
     //bottomLeft
@@ -222,31 +235,37 @@ function bishopPossibleSquaresToMoveAndCut(position,bishopId)
         currentPositionId = String.fromCharCode(j) + i
         $currentPosition = document.getElementById(currentPositionId)
 
-        if($currentPosition.childNodes.length>0)
+        if($currentPosition.childNodes.length>0 && $currentPosition.childNodes[0].id.includes(currentColor))
+            break
+
+        if(isValidToMoveWhileCheck(currentPositionId,currentColor))
         {
-            if(!$currentPosition.childNodes[0].id.includes(currentColor))           //cut
+            if($currentPosition.childNodes.length>0)
             {
-                oppPieces.push($currentPosition.childNodes[0].id)
-                
-                if($currentPosition.style.backgroundColor==="grey")
+                if(!$currentPosition.childNodes[0].id.includes(currentColor) && !$currentPosition.childNodes[0].id.includes("King"))       //cut
                 {
-                    $currentPosition.style.backgroundColor=  chessPieces[$currentPosition.childNodes[0].id]["parentColor"]
-                    $currentPosition.removeEventListener("click" , bishopCutPiece ) 
-                }
-                else 
-                {
-                    $currentPosition.style.backgroundColor="grey"
+                    oppPieces.push($currentPosition.childNodes[0].id)
                     
-                    //2.click event to cut opp piece
-                    $currentPosition.sourcePositionId=position
-                    $currentPosition.bishopId=bishopId
-                    $currentPosition.addEventListener("click" , bishopCutPiece )                   // ********** 
-                }  
+                    if($currentPosition.style.backgroundColor==="grey")
+                    {
+                        $currentPosition.style.backgroundColor=  chessPieces[$currentPosition.childNodes[0].id]["parentColor"]
+                        $currentPosition.removeEventListener("click" , bishopCutPiece ) 
+                    }
+                    else 
+                    {
+                        $currentPosition.style.backgroundColor="grey"
+                        
+                        //2.click event to cut opp piece
+                        $currentPosition.sourcePositionId=position
+                        $currentPosition.bishopId=bishopId
+                        $currentPosition.addEventListener("click" , bishopCutPiece )                   // ********** 
+                    }  
+                }
+                break       //if found an piece,lock the movements,till now
             }
-            break       //if found an piece,lock the movements,till now
-        }
         //highlight next moves && click event to move to the target
-        bishopHightLightMoves($currentPosition,position,bishopId)           //move
+        bishopHightLightMoves($currentPosition,position,bishopId)               //move
+        }
     }
 
     //bottomRight
@@ -255,31 +274,37 @@ function bishopPossibleSquaresToMoveAndCut(position,bishopId)
         currentPositionId = String.fromCharCode(j) + i
         $currentPosition = document.getElementById(currentPositionId)
 
-        if($currentPosition.childNodes.length>0)
+        if($currentPosition.childNodes.length>0 && $currentPosition.childNodes[0].id.includes(currentColor))
+            break
+
+        if(isValidToMoveWhileCheck(currentPositionId,currentColor))
         {
-            if(!$currentPosition.childNodes[0].id.includes(currentColor))       //cut
+            if($currentPosition.childNodes.length>0)
             {
-                oppPieces.push($currentPosition.childNodes[0].id)
-                
-                if($currentPosition.style.backgroundColor==="grey")
+                if(!$currentPosition.childNodes[0].id.includes(currentColor) && !$currentPosition.childNodes[0].id.includes("King"))       //cut
                 {
-                    $currentPosition.style.backgroundColor=  chessPieces[$currentPosition.childNodes[0].id]["parentColor"]
-                    $currentPosition.removeEventListener("click" , bishopCutPiece ) 
-                }
-                else 
-                {
-                    $currentPosition.style.backgroundColor="grey"
+                    oppPieces.push($currentPosition.childNodes[0].id)
                     
-                    //2.click event to cut opp piece
-                    $currentPosition.sourcePositionId=position
-                    $currentPosition.bishopId=bishopId
-                    $currentPosition.addEventListener("click" , bishopCutPiece )                   // ********** 
-                }  
+                    if($currentPosition.style.backgroundColor==="grey")
+                    {
+                        $currentPosition.style.backgroundColor=  chessPieces[$currentPosition.childNodes[0].id]["parentColor"]
+                        $currentPosition.removeEventListener("click" , bishopCutPiece ) 
+                    }
+                    else 
+                    {
+                        $currentPosition.style.backgroundColor="grey"
+                        
+                        //2.click event to cut opp piece
+                        $currentPosition.sourcePositionId=position
+                        $currentPosition.bishopId=bishopId
+                        $currentPosition.addEventListener("click" , bishopCutPiece )                   // ********** 
+                    }  
+                }
+                break       //if found an piece,lock the movements,till now
             }
-            break       //if found an piece,lock the movements,till now
-        }
         //highlight next moves && click event to move to the target
         bishopHightLightMoves($currentPosition,position,bishopId)               //move
+        }
     }
 
     return oppPieces
@@ -464,6 +489,7 @@ function bishopCheckForKing($currentSquare,position,bishopId)
     }
 
     //bottomRight
+    // let possibleKing = false
     for(let i=row-1,j=col+1 ; i>=1 && j<='h'.charCodeAt(0) ; i--,j++)
     {
         $currentPosition = document.getElementById(String.fromCharCode(j) + (i))
@@ -472,7 +498,10 @@ function bishopCheckForKing($currentSquare,position,bishopId)
             checkFunction($currentPosition.childNodes[0].id.slice(0,5),$currentPosition.id,bishopId,"bottomRight")
         }
         else if($currentPosition.childNodes.length>0)
+        {
+
             break
+        }
     }
 }
 //eventListener functions ---------------------
@@ -481,20 +510,29 @@ function bishopCutPiece(eventDetails)
 {
     let sourcePositionId = this.sourcePositionId
     let targetPositionId = this.id
+
     let $sourceSquare = document.getElementById(sourcePositionId)
     let $targetSquare = document.getElementById(targetPositionId)
     let bishopId = $sourceSquare.childNodes[0].id
 
+    let $sourcePiece = document.getElementById(bishopId)
+    let $targetPiece = $targetSquare.childNodes[0]
+    let currentColor = bishopId.slice(0,5)
+
     let col=sourcePositionId[0].charCodeAt(0)
     let row= Number(sourcePositionId[1])
 
+
     //update at obj
     let destinationTempColor= chessPieces[ $targetSquare.childNodes[0].id ]["parentColor"]
+    let sourceTempColor= chessPieces[ $sourceSquare.childNodes[0].id ]["parentColor"]
+
     chessPieces[$targetSquare.childNodes[0].id]["$parentElement"]=''
     chessPieces[$targetSquare.childNodes[0].id]["parentColor"]=''
 
     chessPieces[bishopId]["$parentElement"]= $targetSquare
     chessPieces[bishopId]["parentColor"] = destinationTempColor
+
 
     //update at HTML element
     $targetSquare.style.backgroundColor = destinationTempColor
@@ -509,16 +547,36 @@ function bishopCutPiece(eventDetails)
     //remove event listener at target
     $targetSquare.removeEventListener("click" , bishopCutPiece ) 
     
-    bishopCheckForKing($targetSquare,targetPositionId,bishopId)
+    if(isPossibleCheckIfMoved(currentColor))
+    {
+        //update at obj
+        chessPieces[$targetPiece.id]["$parentElement"]= $targetSquare
+        chessPieces[$targetPiece.id]["parentColor"]=destinationTempColor
 
-    let currentColor = (bishopId.slice(0,5)==="white") ? "black" : "white" 
-    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
+        chessPieces[bishopId]["$parentElement"]= $sourceSquare
+        chessPieces[bishopId]["parentColor"] = sourceTempColor
 
-    //to switch moves (black->white,white->black)
-    if(bishopId.includes("black"))
-        currentPlayerColor="white"
+        //update at HTML element
+        $targetSquare.innerHTML=''
+        $targetSquare.append($targetPiece)
+
+        $sourceSquare.append($sourcePiece)
+
+        alert("Warning !!! , a check can be possible")
+    }
     else
-        currentPlayerColor="black"
+    {
+        bishopCheckForKing($targetSquare,targetPositionId,bishopId)
+
+        chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
+
+        //to switch moves (black->white,white->black)
+        if(bishopId.includes("black"))
+            currentPlayerColor="white"
+        else
+            currentPlayerColor="black"
+    }
+    
 }
 
 function bishopMoveToTarget(eventDetails)
@@ -527,6 +585,8 @@ function bishopMoveToTarget(eventDetails)
     let $currentBishop = document.getElementById(this.bishopId)
     let bishopId=this.bishopId
     let $targetPosition = document.getElementById(this.id)
+    let currentColor = bishopId.slice(0,5)
+
 
     //remove highlight on source position
     chessPieces[bishopId]["$parentElement"].removeEventListener("mouseover",mouseover)
@@ -550,14 +610,37 @@ function bishopMoveToTarget(eventDetails)
     //remove event listeners for highlighted areas and to cut opp piece                              ***
     bishopRemovehighlightedAreas($sourcePosition,$targetPosition)
 
-    bishopCheckForKing($targetPosition,$targetPosition.id,bishopId)
 
-    let currentColor = (bishopId.slice(0,5)==="white") ? "black" : "white" 
-    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
+    if(isPossibleCheckIfMoved(currentColor))        //this is to check, if there is any check for its own king
+    {
+        //update in chessPieces obj
+        chessPieces[bishopId]["$parentElement"]=$sourcePosition
+        chessPieces[bishopId]["parentColor"]=$sourcePosition.style.backgroundColor
 
-    //to switch moves (black->white,white->black)
-    if(bishopId.includes("black"))
-        currentPlayerColor="white"
+        //move bishop , target->src
+        $targetPosition.innerHTML=''
+        $sourcePosition.append($currentBishop)
+
+        //highlight source
+        $sourcePosition.addEventListener("mouseover",mouseover)
+        $sourcePosition.addEventListener("mouseout",mouseout)
+
+        //remove highlight on target position
+        $targetPosition.removeEventListener("mouseover",mouseover)
+        $targetPosition.removeEventListener("mouseout",mouseout)
+
+        alert("Warning !!! , a check can be possible")
+    }
     else
-        currentPlayerColor="black"
+    {
+        bishopCheckForKing($targetPosition,$targetPosition.id,bishopId)  //this is to check for opp king
+
+        chessPieces[ currentColor+"King" ]["isUnderCheck"]=false 
+
+        //to switch moves (black->white,white->black)
+        if(bishopId.includes("black"))
+            currentPlayerColor="white"
+        else
+            currentPlayerColor="black"
+    }
 }

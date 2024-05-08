@@ -145,7 +145,7 @@ function pawnCheckNextSquareToMove(position,pawnId) {
 
 
     //highlight movable areas and move
-    if( pawnCheckValidToMove(`${$nextSquare.id}`,direction) && isValidToMoveWhileCheck($nextSquare.id,pawnId.slice(0,5)) )
+    if( pawnCheckValidToMove(`${$nextSquare.id}`,direction) && isValidToMoveWhileCheckForPawn($nextSquare.id,pawnId.slice(0,5)) )
     {
         if(nextSquareOpacity ===  '1')
         {   
@@ -165,7 +165,7 @@ function pawnCheckNextSquareToMove(position,pawnId) {
         }
     }
 
-    if(!chessPieces[pawnId]["isFirstMoveDone"] && isValidToMoveWhileCheck($nextNextSquare.id,pawnId.slice(0,5)))
+    if(!chessPieces[pawnId]["isFirstMoveDone"] && isValidToMoveWhileCheckForPawn($nextNextSquare.id,pawnId.slice(0,5)))
     {
         pawnCheckNextNextSquareToMove(position,$nextSquare,$nextNextSquare,pawnId,direction)
     }    
@@ -189,7 +189,7 @@ function pawnCheckNextNextSquareToMove(position,$nextSquare,$nextNextSquare,pawn
             //move to nextNext square
             if($nextNextSquare.style.opacity === highlightMovesOpacity)
             {
-                if( isValidToMoveWhileCheck($nextSquare.id,pawnId.slice(0,5)) )
+                if( isValidToMoveWhileCheckForPawn($nextSquare.id,pawnId.slice(0,5)) )
                     $nextNextSquare.addEventListener('click', pawnNextNextFunction )
             }
         }
@@ -217,7 +217,7 @@ function pawnCheckPossiblePieceToCut(position,pawnId) {
         let bottomLeft = String.fromCharCode(col-1) + (row-1)
         let bottomRight = String.fromCharCode(col+1) + (row-1) 
 
-        if(pawnCheckValidToCut("black",bottomLeft,"bottomLeft") && isValidToMoveWhileCheck(bottomLeft,pawnId.slice(0,5)) )
+        if(pawnCheckValidToCut("black",bottomLeft,"bottomLeft") && isValidToCutWhileCheckForPawn(bottomLeft,pawnId.slice(0,5)) )
         {
             let bottomLeftOriginColor= chessPieces[document.getElementById(bottomLeft).childNodes[0].id]['parentColor']
 
@@ -249,7 +249,7 @@ function pawnCheckPossiblePieceToCut(position,pawnId) {
             }
                    
         }
-        if(pawnCheckValidToCut("black",bottomRight,"bottomRight") && isValidToMoveWhileCheck(bottomRight,pawnId.slice(0,5)))
+        if(pawnCheckValidToCut("black",bottomRight,"bottomRight") && isValidToCutWhileCheckForPawn(bottomRight,pawnId.slice(0,5)))
         {
             let bottomRightOriginColor= chessPieces[document.getElementById(bottomRight).childNodes[0].id]['parentColor']
 
@@ -284,7 +284,7 @@ function pawnCheckPossiblePieceToCut(position,pawnId) {
         let topLeft = String.fromCharCode(col-1) + (row+1)
         let topRight = String.fromCharCode(col+1) + (row+1)
 
-        if(pawnCheckValidToCut("white",topLeft,"topLeft") && isValidToMoveWhileCheck(topLeft,pawnId.slice(0,5)) )
+        if(pawnCheckValidToCut("white",topLeft,"topLeft") && isValidToCutWhileCheckForPawn(topLeft,pawnId.slice(0,5)) )
         {
             let topLeftOriginColor= chessPieces[document.getElementById(topLeft).childNodes[0].id]['parentColor']
 
@@ -314,7 +314,7 @@ function pawnCheckPossiblePieceToCut(position,pawnId) {
             }  
         }
 
-        if(pawnCheckValidToCut("white",topRight,"topRight") && isValidToMoveWhileCheck(topRight,pawnId.slice(0,5)) )
+        if(pawnCheckValidToCut("white",topRight,"topRight") && isValidToCutWhileCheckForPawn(topRight,pawnId.slice(0,5)) )
         {
             let topRightOriginColor= chessPieces[document.getElementById(topRight).childNodes[0].id]['parentColor']
 
@@ -390,7 +390,7 @@ function movePawnNextSquare(eventDetails,$nextSquare,$nextNextSquare,pawnId,posi
     //check for king
     pawnCheckForKing($nextSquare,$nextSquare.id,pawnId)
     
-    let currentColor = (pawnId.slice(0,5)==="white") ? "black" : "white" 
+    let currentColor = pawnId.slice(0,5)
     chessPieces[ currentColor+"King" ]["isUnderCheck"]=false 
 
     if(pawnId.includes("black"))
@@ -442,7 +442,7 @@ function movePawnNextNextSquare(eventDetails,$nextSquare,$nextNextSquare,pawnId,
 
     pawnCheckForKing($nextNextSquare,$nextNextSquare.id,pawnId)
 
-    let currentColor = (pawnId.slice(0,5)==="white") ? "black" : "white" 
+    let currentColor = pawnId.slice(0,5)
     chessPieces[ currentColor+"King" ]["isUnderCheck"]=false 
 
     if(pawnId.includes("black"))
@@ -634,14 +634,14 @@ function pawnCheckValidToCut(currentElementColor,position,direction) {
 
     if( direction==="down" )
     {
-        if( (row)>=1 &&  document.getElementById( `${position}` ).childNodes.length>0 && !( document.getElementById(`${position}`).childNodes[0].id.includes( currentElementColor ) ) )
+        if( (row)>=1 &&  document.getElementById( `${position}` ).childNodes.length>0 && !( document.getElementById(`${position}`).childNodes[0].id.includes( currentElementColor ) ) && !document.getElementById(`${position}`).childNodes[0].id.includes("King") )
             return true
         else
             return false
     }
     else if( direction==="up" )
     {
-        if ((row)<=8 &&  document.getElementById( `${position}` ).childNodes.length>0 && !document.getElementById(`${position}`).childNodes[0].id.includes(( currentElementColor ) ) ) {
+        if ((row)<=8 &&  document.getElementById( `${position}` ).childNodes.length>0 && !document.getElementById(`${position}`).childNodes[0].id.includes(( currentElementColor ) ) && !document.getElementById(`${position}`).childNodes[0].id.includes("King") ) {
             return true
         } else {
             return false
@@ -649,7 +649,7 @@ function pawnCheckValidToCut(currentElementColor,position,direction) {
     }
     else if( direction==="left" )
     {
-        if( col>='a'.charCodeAt(0) && document.getElementById( `${position}` ).childNodes.length>0 && !document.getElementById(`${position}`).childNodes[0].id.includes(( currentElementColor ) ) ) {
+        if( col>='a'.charCodeAt(0) && document.getElementById( `${position}` ).childNodes.length>0 && !document.getElementById(`${position}`).childNodes[0].id.includes(( currentElementColor ) ) && !document.getElementById(`${position}`).childNodes[0].id.includes("King") ) {
             return true
         }
         else{
@@ -658,7 +658,7 @@ function pawnCheckValidToCut(currentElementColor,position,direction) {
     }
     else if( direction==="right" )//ryt
     {
-        if( col<='h'.charCodeAt(0) && document.getElementById( `${position}` ).childNodes.length>0 && !document.getElementById(`${position}`).childNodes[0].id.includes(( currentElementColor ) ) ) {
+        if( col<='h'.charCodeAt(0) && document.getElementById( `${position}` ).childNodes.length>0 && !document.getElementById(`${position}`).childNodes[0].id.includes(( currentElementColor ) ) && !document.getElementById(`${position}`).childNodes[0].id.includes("King") ) {
             return true
         }
         else{
@@ -778,8 +778,8 @@ function  pawnCutPieceBottomLeft(eventDetails) {
     
     pawnCheckForKing(document.getElementById(bottomLeft),bottomLeft,pawnId)
 
-    let currentColor = (pawnId.slice(0,5)==="white") ? "black" : "white" 
-    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
+    let currentColor = pawnId.slice(0,5)
+    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false 
 
     if(pawnId.includes("black"))
         currentPlayerColor="white"
@@ -839,8 +839,8 @@ function  pawnCutPieceBottomRight(eventDetails) {
 
     pawnCheckForKing(document.getElementById(bottomRight),bottomRight,pawnId)
 
-    let currentColor = (pawnId.slice(0,5)==="white") ? "black" : "white" 
-    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
+    let currentColor = pawnId.slice(0,5)
+    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false 
 
     if(pawnId.includes("black"))
         currentPlayerColor="white"
@@ -900,8 +900,8 @@ function  pawnCutPieceTopLeft(eventDetails) {
 
     pawnCheckForKing(document.getElementById(topLeft),topLeft,pawnId)
 
-    let currentColor = (pawnId.slice(0,5)==="white") ? "black" : "white" 
-    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
+    let currentColor = pawnId.slice(0,5)
+    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false 
 
     if(pawnId.includes("black"))
         currentPlayerColor="white"
@@ -961,8 +961,8 @@ function  pawnCutPieceTopRight(eventDetails) {
 
     pawnCheckForKing(document.getElementById(topRight),topRight,pawnId)
 
-    let currentColor = (pawnId.slice(0,5)==="white") ? "black" : "white" 
-    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false
+    let currentColor = pawnId.slice(0,5)
+    chessPieces[ currentColor+"King" ]["isUnderCheck"]=false 
 
     if(pawnId.includes("black"))
         currentPlayerColor="white"
