@@ -64,6 +64,8 @@ function setBlackRook() {
 
     //set properties
     $piece.addEventListener("click",setRookProperties)
+    //$piece.removeEventListener("click",setRookProperties)
+
     
 }
 

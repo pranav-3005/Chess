@@ -6,8 +6,9 @@ $.getScript("./pieceFunctions/queenFunctions.js")
 $.getScript("./pieceFunctions/kingFunctions.js")
 
 
-// "rgb(148,96,44)","rgb(231,204,177)" black,white
+// "rgb(148,96,44)","rgb(231,204,177)"  ===  black,white
 var path=[]
+var currentSelectedPieceId = '' 
 
 function setChessBoard() {
 
@@ -338,14 +339,6 @@ function isPossibleCheckIfMoved(currentColor)
     return false
 
 }
-//need ot do changes for knight
-// function checkForBlocks(path,KingColor)
-// {
-//     for( let pathId of path)
-//     {
-//         checkForPawn(pathId,KingColor)
-//     }
-// }
 
 function getPath(oppRow,oppCol,kingRow,kingCol,direction)
 {
@@ -426,45 +419,139 @@ function getPath(oppRow,oppCol,kingRow,kingCol,direction)
 
 }
 
+function unselectPiece(pieceid)
+{
+    let row = Number(pieceid[1])
+    let col = pieceid[0].charCodeAt(0)
 
-//blocks
-// function checkForPawn(pathId,currentColor)
-// {
-//     let row = Number(pathId[1])
-//     let col = pathId[0].charCodeAt(0)
-//     if(currentColor==="black")
-//     {
-//         let $bottomLeftSquare = document.getElementById(String.fromCharCode(col-1)+(row-1))
-//         let $bottomRightSquare = document.getElementById(String.fromCharCode(col+1)+(row-1))
-//         let $bottomSquare = document.getElementById(String.fromCharCode(col)+(row-1))
+    if(pieceid.includes("Pawn"))
+    {
+        if(pieceid.includes("black"))
+        {
 
-//         if(document.getElementById(pathId).childNodes.length>0)
-//         {
-//             if(col-1>='a'.charCodeAt(0) && row-1>=1 && $bottomLeftSquare.childNodes.length>0 && $bottomLeftSquare.childNodes[0].id.includes(currentColor) && $bottomLeftSquare.childNodes[0].id.includes("Pawn"))
-//             {
-//                 $bottomLeftSquare.childNodes[0].addEventListener("click",setPawnProperties,{capture:true}) 
-//             }
+        }
+        else
+        {
+            
+        }
+    }
+    else if(pieceid.includes("Rook"))
+    {
 
-//         }
-//     }
-//     else
-//     {
+    }
+    else if(pieceid.includes("Knight"))
+    {
 
-//     }
-// }
+    }
+    else if(pieceid.includes("Bishop"))
+    {
 
+    }
+    else if(pieceid.includes("Queen"))
+    {
+        
+    }
+    else if(pieceid.includes("King"))
+    {
 
+    }
+}
 
+function blockOtherPiecesClickEvent(condition,currentPieceId) {
+    
+    // let currentColor = currentPieceId.slice(0,5)
 
-
-
-//--------------- mics
-//lock other pieces,which cannot block opp pieces
-    // for(let pieceId in chessPieces)
+    // if(condition===true)
     // {
-    //     if(pieceId.includes(KingColor) && !(pieceId.includes("King")))
+    //     for(let id in chessPieces)
     //     {
-    //         if(pieceId.includes("Pawn"))
-    //             document.getElementById(pieceId).removeEventListener("click",setPawnProperties,{capture:true}) 
+    //         if(id.includes(currentColor) && id!==currentPieceId)
+    //         {
+    //             //pawn
+                
+    //             if(id.includes("Pawn"))
+    //             {
+    //                 chessPieces[id].$pieceElement.removeEventListener("click",setPawnProperties) 
+    //             }
+
+    //             //rook
+    //             else if(id.includes("Rook"))
+    //             {
+        
+    //                 document.getElementById(id).removeEventListener("click",setRookProperties)
+    //             } 
+
+    //             //knight
+    //             else if(id.includes("Knight"))
+    //             {
+    //                 chessPieces[id].$pieceElement.removeEventListener("click",setKnightProperties)
+    //             }
+
+    //             //bishop
+    //             else if(id.includes("Bishop"))
+    //             {
+    //                 chessPieces[id].$pieceElement.removeEventListener("click",setBishopProperties)
+    //             }
+
+    //             //queen
+    //             else if(id.includes("Queen"))
+    //             {
+    //                 chessPieces[id].$pieceElement.removeEventListener("click",setQueenProperties)
+    //             }
+
+    //             //king
+    //             else if(id.includes("King"))
+    //             {
+    //                 chessPieces[id].$pieceElement.removeEventListener("click",setKingProperties)
+    //             }
+                
+    //         }
     //     }
     // }
+    // else
+    // {
+    //     for(let id in chessPieces)
+    //     {
+    //         if(id.includes(currentColor) && id!==currentPieceId)
+    //         {
+    //             //pawn
+    //             if(id.includes("Pawn"))
+    //             {
+    //                 chessPieces[id].$pieceElement.addEventListener("click",setPawnProperties) 
+    //             }
+
+    //             //rook
+    //             else if(id.includes("Rook"))
+    //             {
+    //                 chessPieces[id].$pieceElement.addEventListener("click",setRookProperties)
+    //             }
+
+    //             //knight
+    //             else if(id.includes("Knight"))
+    //             {
+    //                 chessPieces[id].$pieceElement.addEventListener("click",setKnightProperties)
+    //             }
+
+    //             //bishop
+    //             else if(id.includes("Bishop"))
+    //             {
+    //                 chessPieces[id].$pieceElement.addEventListener("click",setBishopProperties)
+    //             }
+
+    //             //queen
+    //             else if(id.includes("Queen"))
+    //             {
+    //                 chessPieces[id].$pieceElement.addEventListener("click",setQueenProperties)
+    //             }
+
+    //             //king
+    //             else if(id.includes("King"))
+    //             {
+    //                 chessPieces[id].$pieceElement.addEventListener("click",setKingProperties)
+    //             }
+                
+    //         }
+    //     }
+    // }
+}
+

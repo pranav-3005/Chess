@@ -133,6 +133,9 @@ function setKnightProperties(eventDetails) {
     //to check player's turn
     if(knightId.includes(currentPlayerColor))
     {
+        //block all other piece's click event
+        blockOtherPiecesClickEvent(true,knightId)
+
         let possibleCuts = [] // debugging purpose
         possibleCuts = knightPossibleSquaresToMoveAndCut(position,knightId)
         console.log(knightId,possibleCuts) // debugging purpose
@@ -262,6 +265,9 @@ function knightMoves($currentPosition,currentColor,oppPieces,position,knightId)
             {
                 $currentPosition.style.backgroundColor=  chessPieces[$currentPosition.childNodes[0].id]["parentColor"]
                 $currentPosition.removeEventListener("click" , knightCutPiece ) 
+
+            //block all other piece's click event
+            blockOtherPiecesClickEvent(false,knightId)
             }
             else 
             {
@@ -293,6 +299,9 @@ function knightMoves($currentPosition,currentColor,oppPieces,position,knightId)
 
             //remove event listener for rookMoveToTarget
             $currentPosition.removeEventListener("click",knightMoveToTarget)
+
+            //block all other piece's click event
+            blockOtherPiecesClickEvent(false,knightId)
         }
     }
 }
@@ -582,6 +591,9 @@ function knightCutPiece(eventDetails)
     else
         currentPlayerColor="black"
 
+    //block all other piece's click event
+    blockOtherPiecesClickEvent(false,knightId)
+
 }
 
 function knightMoveToTarget(eventDetails) {
@@ -622,4 +634,7 @@ function knightMoveToTarget(eventDetails) {
         currentPlayerColor="white"
     else
         currentPlayerColor="black"
+
+    //block all other piece's click event
+    blockOtherPiecesClickEvent(false,knightId)
 }

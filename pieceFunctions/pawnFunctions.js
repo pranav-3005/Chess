@@ -37,8 +37,9 @@ function setBlackPawn(c) {
         $square.addEventListener("mouseout",mouseout)
 
         //set pawn properties
-        $piece.addEventListener("click",setPawnProperties,{capture:true}) 
+        $piece.addEventListener("click",setPawnProperties) 
 }
+
 function setWhitePawn(c) {
    
     let $piece = document.createElement('div')
@@ -67,9 +68,8 @@ function setWhitePawn(c) {
     //highlight the square
     $square.addEventListener("mouseover",mouseover)
     $square.addEventListener("mouseout",mouseout)
-
     //set piece properties
-    $piece.addEventListener("click",setPawnProperties,{capture:true})  
+    $piece.addEventListener("click",setPawnProperties)  
 }
 
 //properties ------------------------------
@@ -84,17 +84,23 @@ function setPawnProperties(eventDetails) {
     //to check, if currently its a white's turn or black's turn
     if( chessPieces[pawnId]["parentColor"] && pawnId.includes(currentPlayerColor))
     {
-        // let $square= document.getElementById(position)
+        if(currentSelectedPieceId!=='')
+        {
+            currentSelectedPieceId=pawnId
+        }
+        else
+        {
+            unselectPiece(currentSelectedPieceId)
+        }
 
-        // $square.removeEventListener("mouseover",mouseover)
-        // $square.removeEventListener("mouseout",mouseout)
         //check and move forward
         pawnCheckNextSquareToMove(position,pawnId)
 
         //cut possible opp pieces
         pawnCheckPossiblePieceToCut(position,pawnId)
-    }
 
+        // //blockOtherPiecesClickEvent(false,pawnId)
+    }
 
 }
 
@@ -155,13 +161,19 @@ function pawnCheckNextSquareToMove(position,pawnId) {
             //move to next square
             if($nextSquare.style.opacity === highlightMovesOpacity)
             {
+                //block all other piece's click event
+                // //blockOtherPiecesClickEvent(true,pawnId)
                 $nextSquare.addEventListener('click', pawnNextFunction )
             }
         }
         else
         {
+            //block all other piece's click event
+            //blockOtherPiecesClickEvent(false,pawnId)
+
             $nextSquare.style.opacity='1'
             $nextSquare.removeEventListener('click', pawnNextFunction )
+            
         }
     }
 
@@ -195,6 +207,9 @@ function pawnCheckNextNextSquareToMove(position,$nextSquare,$nextNextSquare,pawn
         }
         else
         {
+            //block all other piece's click event
+            //blockOtherPiecesClickEvent(false,pawnId)
+
             $nextNextSquare.style.opacity='1'
             $nextNextSquare.removeEventListener('click', pawnNextNextFunction )
         }
@@ -226,10 +241,6 @@ function pawnCheckPossiblePieceToCut(position,pawnId) {
                 //display those squares
                 document.getElementById(bottomLeft).style.backgroundColor='grey'
 
-                // console.log(document.getElementById(bottomLeft).childNodes[0])
-
-                document.getElementById(bottomLeft).childNodes[0].removeEventListener("click",(eventDetails)=>{setPawnProperties(eventDetails,document.getElementById(bottomLeft).childNodes[0].id)}) 
-
                 //cut opp piece *********
                 let $bottomLeftPiece = document.getElementById(bottomLeft).childNodes[0]
                 $bottomLeftPiece.position=position //for passing req variables
@@ -237,7 +248,7 @@ function pawnCheckPossiblePieceToCut(position,pawnId) {
                 $bottomLeftPiece.bottomLeft=bottomLeft
                 $bottomLeftPiece.bottomRight=bottomRight
 
-                $bottomLeftPiece.addEventListener("click",pawnCutPieceBottomLeft,{once:true,capture:true})
+                $bottomLeftPiece.addEventListener("click",pawnCutPieceBottomLeft)
                 
             }    
             else
@@ -245,7 +256,7 @@ function pawnCheckPossiblePieceToCut(position,pawnId) {
                 //display those squares
                 document.getElementById(bottomLeft).style.backgroundColor= bottomLeftOriginColor
                 let $bottomLeftPiece = document.getElementById(bottomLeft).childNodes[0]
-                $bottomLeftPiece.removeEventListener("click",pawnCutPieceBottomLeft,{once:true,capture:true})
+                $bottomLeftPiece.removeEventListener("click",pawnCutPieceBottomLeft)
             }
                    
         }
@@ -257,24 +268,20 @@ function pawnCheckPossiblePieceToCut(position,pawnId) {
             {
                 document.getElementById(bottomRight).style.backgroundColor='grey'
 
-                document.getElementById(bottomRight).childNodes[0].removeEventListener("click",(eventDetails)=>{setPawnProperties(eventDetails,document.getElementById(bottomRight).childNodes[0].id)}) 
-
-                // console.log(bottomRight,"hii out")
                 //cut opp piece *********
-
                 let $bottomRightPiece= document.getElementById(bottomRight).childNodes[0]
                 $bottomRightPiece.position=position
                 $bottomRightPiece.pawnId=pawnId
                 $bottomRightPiece.bottomRight=bottomRight
                 $bottomRightPiece.bottomLeft=bottomLeft
 
-                $bottomRightPiece.addEventListener("click", pawnCutPieceBottomRight , {once:true,capture:true})
+                $bottomRightPiece.addEventListener("click", pawnCutPieceBottomRight ,)
             }
             else
             {
                 document.getElementById(bottomRight).style.backgroundColor=bottomRightOriginColor
                 let $bottomRightPiece= document.getElementById(bottomRight).childNodes[0]
-                $bottomRightPiece.removeEventListener("click", pawnCutPieceBottomRight , {once:true,capture:true})
+                $bottomRightPiece.removeEventListener("click", pawnCutPieceBottomRight ,)
             }
         }
    
@@ -293,8 +300,6 @@ function pawnCheckPossiblePieceToCut(position,pawnId) {
                 //display those squares
                 document.getElementById(topLeft).style.backgroundColor='grey'
 
-                document.getElementById(topLeft).childNodes[0].removeEventListener("click",(eventDetails)=>{setPawnProperties(eventDetails,document.getElementById(topLeft).childNodes[0].id)}) 
-
                 //cut opp piece *********
                 let $topLeftPiece= document.getElementById(topLeft).childNodes[0]
                 $topLeftPiece.position=position
@@ -302,7 +307,7 @@ function pawnCheckPossiblePieceToCut(position,pawnId) {
                 $topLeftPiece.topLeft=topLeft
                 $topLeftPiece.topRight=topRight
 
-                $topLeftPiece.addEventListener("click", pawnCutPieceTopLeft ,{once:true,capture:true})
+                $topLeftPiece.addEventListener("click", pawnCutPieceTopLeft )
 
             }    
             else
@@ -310,7 +315,7 @@ function pawnCheckPossiblePieceToCut(position,pawnId) {
                 //revert
                 document.getElementById(topLeft).style.backgroundColor= topLeftOriginColor
                 let $topLeftPiece= document.getElementById(topLeft).childNodes[0]
-                $topLeftPiece.removeEventListener("click", pawnCutPieceTopLeft ,{once:true,capture:true})
+                $topLeftPiece.removeEventListener("click", pawnCutPieceTopLeft )
             }  
         }
 
@@ -322,8 +327,6 @@ function pawnCheckPossiblePieceToCut(position,pawnId) {
             {
                 document.getElementById(topRight).style.backgroundColor='grey'
 
-                // document.getElementById(topRight).childNodes[0].removeEventListener("click",(eventDetails)=>{setPawnProperties(eventDetails,document.getElementById(topRight).childNodes[0].id)}) 
-
                 //cut opp piece *********
                 let $topRightPiece= document.getElementById(topRight).childNodes[0]
                 $topRightPiece.position=position
@@ -331,14 +334,14 @@ function pawnCheckPossiblePieceToCut(position,pawnId) {
                 $topRightPiece.topLeft=topLeft
                 $topRightPiece.topRight=topRight
 
-                $topRightPiece.addEventListener("click", pawnCutPieceTopRight , {once:true,capture:true})
+                $topRightPiece.addEventListener("click", pawnCutPieceTopRight ,)
 
             }
             else
             {
                 document.getElementById(topRight).style.backgroundColor=topRightOriginColor
                 let $topRightPiece= document.getElementById(topRight).childNodes[0]
-                $topRightPiece.removeEventListener("click", pawnCutPieceTopRight , {once:true,capture:true})
+                $topRightPiece.removeEventListener("click", pawnCutPieceTopRight ,)
             }
         }
 
@@ -348,6 +351,7 @@ function pawnCheckPossiblePieceToCut(position,pawnId) {
 
 function movePawnNextSquare(eventDetails,$nextSquare,$nextNextSquare,pawnId,position) {
 
+    
     let col=position[0].charCodeAt(0)
     let row= Number(position[1])
 
@@ -393,11 +397,15 @@ function movePawnNextSquare(eventDetails,$nextSquare,$nextNextSquare,pawnId,posi
     let currentColor = pawnId.slice(0,5)
     chessPieces[ currentColor+"King" ]["isUnderCheck"]=false 
 
+    //block other piece's click event
+    //blockOtherPiecesClickEvent(false,pawnId)
+
     if(pawnId.includes("black"))
         currentPlayerColor="white"
     else
         currentPlayerColor="black"
 }
+
 function movePawnNextNextSquare(eventDetails,$nextSquare,$nextNextSquare,pawnId,position) {
 
     let col=position[0].charCodeAt(0)
@@ -445,6 +453,9 @@ function movePawnNextNextSquare(eventDetails,$nextSquare,$nextNextSquare,pawnId,
     let currentColor = pawnId.slice(0,5)
     chessPieces[ currentColor+"King" ]["isUnderCheck"]=false 
 
+    //block other piece's click event
+    //blockOtherPiecesClickEvent(false,pawnId)
+
     if(pawnId.includes("black"))
         currentPlayerColor="white"
     else
@@ -460,14 +471,14 @@ function pawnRemoveEventListenersToCutOpponentPiece(position,pawnId,row,col)
         //$bottomLeft
         if(col-1>='a'.charCodeAt(0) && (row-1)>=1 && $bottomLeft.childNodes.length>0 && $bottomLeft.style.backgroundColor==="grey")
         {
-                $bottomLeft.childNodes[0].removeEventListener("click",pawnCutPieceBottomLeft,{once:true,capture:true})
+                $bottomLeft.childNodes[0].removeEventListener("click",pawnCutPieceBottomLeft)
                 $bottomLeft.style.backgroundColor= chessPieces[$bottomLeft.childNodes[0].id]["parentColor"]
             }
         
         //bottomRyt
         if(col+1<='h'.charCodeAt(0) && (row-1)>=1 && $bottomRight.childNodes.length>0 && $bottomRight.style.backgroundColor==="grey")
         {
-            $bottomRight.childNodes[0].removeEventListener("click", pawnCutPieceBottomRight , {once:true,capture:true})
+            $bottomRight.childNodes[0].removeEventListener("click", pawnCutPieceBottomRight)
             $bottomRight.style.backgroundColor= chessPieces[$bottomRight.childNodes[0].id]["parentColor"]
         }
     }
@@ -480,14 +491,14 @@ function pawnRemoveEventListenersToCutOpponentPiece(position,pawnId,row,col)
         //$topLeft
         if(col-1>='a'.charCodeAt(0) && (row+1)<=8 && $topLeft.childNodes.length>0 && $topLeft.style.backgroundColor==="grey")
         {
-            $topLeft.childNodes[0].removeEventListener("click",pawnCutPieceTopLeft,{once:true,capture:true})
+            $topLeft.childNodes[0].removeEventListener("click",pawnCutPieceTopLeft)
             $topLeft.style.backgroundColor= chessPieces[$topLeft.childNodes[0].id]["parentColor"]
         }
         
         //topRyt
         if(col+1<='h'.charCodeAt(0) && (row+1)<=8 && $topRight.childNodes.length>0 && $topRight.style.backgroundColor==="grey")
         {
-           $topRight.childNodes[0].removeEventListener("click", pawnCutPieceTopRight , {once:true,capture:true})
+           $topRight.childNodes[0].removeEventListener("click", pawnCutPieceTopRight)
            $topRight.style.backgroundColor= chessPieces[$topRight.childNodes[0].id]["parentColor"]
         }
     
@@ -739,7 +750,7 @@ function  pawnCutPieceBottomLeft(eventDetails) {
     let col=position[0].charCodeAt(0) 
     let row= Number(position[1])
 
-    eventDetails.stopPropagation()
+    
 
     let destinationTempColor=chessPieces[document.getElementById(bottomLeft).childNodes[0].id]['parentColor']
 
@@ -770,7 +781,7 @@ function  pawnCutPieceBottomLeft(eventDetails) {
     blackPawnRevertHighlight(position)
 
     if(col+1<='h'.charCodeAt(0) && (row-1)>=1 && document.getElementById( `${bottomRight}` ).childNodes.length>0)   //removeEventListener of ryt bottom
-        document.getElementById(bottomRight).childNodes[0].removeEventListener("click", pawnCutPieceBottomRight , {once:true,capture:true})
+        document.getElementById(bottomRight).childNodes[0].removeEventListener("click", pawnCutPieceBottomRight ,)
 
     //remove hover highlight in source
     document.getElementById(position).removeEventListener("mouseover",mouseover)
@@ -780,6 +791,9 @@ function  pawnCutPieceBottomLeft(eventDetails) {
 
     let currentColor = pawnId.slice(0,5)
     chessPieces[ currentColor+"King" ]["isUnderCheck"]=false 
+
+    //block other piece's click event
+    //blockOtherPiecesClickEvent(false,pawnId)
 
     if(pawnId.includes("black"))
         currentPlayerColor="white"
@@ -797,7 +811,7 @@ function  pawnCutPieceBottomRight(eventDetails) {
     let col=position[0].charCodeAt(0) 
     let row= Number(position[1])
 
-    eventDetails.stopPropagation()
+    
 
     //update destination end        
     chessPieces[document.getElementById(bottomRight).childNodes[0].id]["$parentElement"]=''
@@ -831,7 +845,7 @@ function  pawnCutPieceBottomRight(eventDetails) {
         chessPieces[pawnId]["isFirstMoveDone"]=true 
 
     if(col-1>='a'.charCodeAt(0) && (row-1)>=1 && document.getElementById( `${bottomLeft}` ).childNodes.length>0)   //removeEventListener of bottom left
-        document.getElementById(bottomLeft).childNodes[0].removeEventListener("click", pawnCutPieceBottomLeft , {once:true,capture:true}) 
+        document.getElementById(bottomLeft).childNodes[0].removeEventListener("click", pawnCutPieceBottomLeft ,) 
     
     //remove hover highlight in source
     document.getElementById(position).removeEventListener("mouseover",mouseover)
@@ -841,6 +855,9 @@ function  pawnCutPieceBottomRight(eventDetails) {
 
     let currentColor = pawnId.slice(0,5)
     chessPieces[ currentColor+"King" ]["isUnderCheck"]=false 
+
+    //block other piece's click event
+    //blockOtherPiecesClickEvent(false,pawnId)
 
     if(pawnId.includes("black"))
         currentPlayerColor="white"
@@ -860,7 +877,7 @@ function  pawnCutPieceTopLeft(eventDetails) {
     let col=position[0].charCodeAt(0) 
     let row= Number(position[1])
 
-    eventDetails.stopPropagation()
+    
 
     //update destination end        
     chessPieces[document.getElementById(topLeft).childNodes[0].id]["$parentElement"]=''
@@ -892,7 +909,7 @@ function  pawnCutPieceTopLeft(eventDetails) {
         chessPieces[pawnId]["isFirstMoveDone"]=true 
 
     if(col+1<='h'.charCodeAt(0) && (row+1)<=8 && document.getElementById( `${topRight}` ).childNodes.length>0)   //removeEventListener of top ryt 
-        document.getElementById(topRight).childNodes[0].removeEventListener("click", pawnCutPieceTopRight , {once:true,capture:true})
+        document.getElementById(topRight).childNodes[0].removeEventListener("click", pawnCutPieceTopRight ,)
     
     //remove hover highlight in source
     document.getElementById(position).removeEventListener("mouseover",mouseover)
@@ -902,6 +919,9 @@ function  pawnCutPieceTopLeft(eventDetails) {
 
     let currentColor = pawnId.slice(0,5)
     chessPieces[ currentColor+"King" ]["isUnderCheck"]=false 
+
+    //block other piece's click event
+    //blockOtherPiecesClickEvent(false,pawnId)
 
     if(pawnId.includes("black"))
         currentPlayerColor="white"
@@ -921,7 +941,7 @@ function  pawnCutPieceTopRight(eventDetails) {
     let col=position[0].charCodeAt(0) 
     let row= Number(position[1])
 
-    eventDetails.stopPropagation()
+    
 
     //update destination end        
     chessPieces[document.getElementById(topRight).childNodes[0].id]["$parentElement"]=''
@@ -953,7 +973,7 @@ function  pawnCutPieceTopRight(eventDetails) {
         chessPieces[pawnId]["isFirstMoveDone"]=true 
 
     if(col-1>='a'.charCodeAt(0) && (row+1)<=8 && document.getElementById( `${topLeft}` ).childNodes.length>0)   //removeEventListener of top left 
-        document.getElementById(topLeft).childNodes[0].removeEventListener("click", pawnCutPieceTopLeft , {once:true,capture:true})
+        document.getElementById(topLeft).childNodes[0].removeEventListener("click", pawnCutPieceTopLeft ,)
 
     //remove hover highlight in source
     document.getElementById(position).removeEventListener("mouseover",mouseover)
@@ -963,6 +983,9 @@ function  pawnCutPieceTopRight(eventDetails) {
 
     let currentColor = pawnId.slice(0,5)
     chessPieces[ currentColor+"King" ]["isUnderCheck"]=false 
+
+    //block other piece's click event
+    //blockOtherPiecesClickEvent(false,pawnId)
 
     if(pawnId.includes("black"))
         currentPlayerColor="white"
